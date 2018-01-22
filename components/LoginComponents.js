@@ -1,5 +1,4 @@
-const CLIENT_ID = '0a4a82f98973453f87737e20f44f957c';
-const scopes = 'user-read-recently-played'
+import { CLIENT_ID, scopes } from "../graphqllib/spotify-config";
 import Button from './button'
 
 function redirectToLogin() {
