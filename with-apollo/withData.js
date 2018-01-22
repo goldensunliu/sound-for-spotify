@@ -33,15 +33,16 @@ export default ComposedComponent => {
             {
                 cookies = context.req.headers.cookie
                 let protocol
-                // use whatever is in the req
-                if (dev)
-                {
-                    protocol = context.req.protocol
-                }
                 // use the de-factor header x-forwarded-proto behind now's load balancer
-                else
+                if (!dev && context.req.headers['x-forwarded-proto'])
                 {
                     protocol= context.req.headers['x-forwarded-proto']
+                    protocol = context.req.protocol
+                }
+                // use whatever is in the req
+                else
+                {
+                    protocol = context.req.protocol
                 }
                 graphQlServerUrl = `${protocol}://${context.req.get('host')}/graphql`
             }
