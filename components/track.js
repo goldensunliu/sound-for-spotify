@@ -55,6 +55,7 @@ query audioFeatures($id: String!) {
     time_signature
   }
   track(id: $id) {
+    id
     saved
   }
 }
