@@ -24,6 +24,10 @@ export function makeResolvers(token) {
             playlist: async(obj, {playlistId, userId}) => {
                 const playlistFull = await PlaylistLoader.load({ playlistId, userId })
                 return playlistFull
+            },
+            artist: async(obj, {artistId}) => {
+                const artist = await ArtistLoader.load(artistId)
+                return artist
             }
         },
         Playlist: {

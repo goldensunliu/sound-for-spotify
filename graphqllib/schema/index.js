@@ -26,6 +26,11 @@ const RootQuery = `
     Get a playlist owned by a Spotify user
     """
     playlist(userId: String!, playlistId: String!): Playlist
+    """
+    Get an artist
+    """
+    artist(artistId: String!): Artist
+    
   }
 `;
 
