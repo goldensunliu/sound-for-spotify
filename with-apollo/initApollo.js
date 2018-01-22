@@ -1,5 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
+// TODO when https://github.com/apollographql/apollo-link/pull/364 is merged start using batch
+// import { BatchHttpLink } from "apollo-link-batch-http"
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import fetch from 'isomorphic-fetch'
 

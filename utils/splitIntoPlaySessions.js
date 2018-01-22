@@ -1,5 +1,6 @@
 
 // TODO test
+// TODO make new query for getting a list of sessions using these instead of calling this on the client
 const splitIntoPlaySessions = (history) => {
     let sessions = []
     let currentPlaySession;

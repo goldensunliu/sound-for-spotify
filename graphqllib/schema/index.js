@@ -12,6 +12,7 @@ import PlayHistory from './PlayHistory'
 const SchemaDefinition = `
   schema {
     query: RootQuery
+    mutation: Mutation
   }
 `;
 
@@ -34,7 +35,16 @@ const RootQuery = `
     Get audio features of a track
     """
     audioFeatures(id: String!): AudioFeatures
+    """
+    Get a track
+    """
+    track(id: String!): Track
     
+  }
+  type Mutation {
+    """
+    """
+    saveTrack(trackId: String!): Track
   }
 `;
 

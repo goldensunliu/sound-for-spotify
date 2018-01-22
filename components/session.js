@@ -33,6 +33,8 @@ const SessionDivider = ({playedAt, now, length, toggleExpand }) => {
     )
 }
 
+// Sessions are processed on the UI layer from the recently played graphql query
+// TODO make new query for getting a list of sessions
 export default class Session extends Component {
     state = {
         expanded : true

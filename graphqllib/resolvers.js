@@ -1,6 +1,6 @@
 import {
     getFeaturedPlaylists, getRecentlyPlayed, makePlaylistLoader, makePlaylistTracksLoader, makeAlbumsLoader,
-    makeUserLoader, makeArtistsLoader, makeAudioFeaturesLoader
+    makeUserLoader, makeArtistsLoader, makeAudioFeaturesLoader, saveTrackToLib, makeTracksLoader, makeSavedContainsLoader
 } from './SpotifyWebApi'
 
 export function makeResolvers(token) {
@@ -10,6 +10,8 @@ export function makeResolvers(token) {
     const UserLoader = makeUserLoader(token)
     const ArtistLoader = makeArtistsLoader(token)
     const AudioFeatureLoader = makeAudioFeaturesLoader(token)
+    const SavedContainsLoader = makeSavedContainsLoader(token)
+    const TrackLoader = makeTracksLoader(token)
 
     const resolvers = {
         RootQuery: {
@@ -29,9 +31,19 @@ export function makeResolvers(token) {
                 const artist = await ArtistLoader.load(artistId)
                 return artist
             },
+            track: async(obj, {id}) => {
+                const track = await TrackLoader.load(id)
+                return track
+            },
             audioFeatures: async (obj, {id}) => {
                 const features = await AudioFeatureLoader.load(id)
                 return features
+            }
+        },
+        Mutation: {
+            saveTrack: async (obj, {trackId}) => {
+                await saveTrackToLib(token, [trackId])
+                return { id: trackId, saved: true }
             }
         },
         Playlist: {
@@ -52,6 +64,10 @@ export function makeResolvers(token) {
             audio_features: async ({ id }) => {
                 const features = await AudioFeatureLoader.load(id)
                 return features
+            },
+            saved: async ({id}) => {
+                const saved = await SavedContainsLoader.load(id)
+                return saved
             }
         },
         User: {

@@ -3,7 +3,9 @@ import {formatRelative} from 'date-fns'
 import Color from 'color'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import { compose } from 'react-apollo'
 
+import Button from '../components/button'
 import Grow from "./transitions/grow"
 import { backGroundOrange, backGroundGrey } from '../utils/colors'
 import ImageWithLoader from '../components/ImageWithLoader'
@@ -52,6 +54,17 @@ query audioFeatures($id: String!) {
     mode
     time_signature
   }
+  track(id: $id) {
+    saved
+  }
+}
+`
+const saveTrackMutation = gql`
+mutation ($trackId: String!) {
+    saveTrack(trackId: $trackId) {
+      id
+      saved
+    }
 }
 `
 
@@ -68,29 +81,19 @@ const graphalOptions = {
 class ExpandedContent extends Component {
     state = {}
 
-    // TODO bring this back via graphql
+    // TODO must update cache after mutate
     saveTrack = async () => {
-        const token = getStoredToken();
-        // this really shouldn't happen
-        if (!token) return
-        // don't flash the loading state if it saves under 200 ms
-        setTimeout(() => {
-            if (!this.state.saved) {
-                this.setState( { saving: true })
-            }
-        }, 200)
-        const { track: { id } } = this.props;
-        const res = await saveTrackToLib(token, id);
-        if (res.status == 200) {
-            this.setState({ saved: true })
-        }
-        this.setState( { saving: false })
+        const { id } = this.props.track
+        this.props.mutate({
+            variables: { trackId: id }
+        })
     }
 
     render() {
         const { played_at, track : { id, artists }, data } = this.props;
         if (data.loading) return <Spinner/>
         const audio_features = data.audioFeatures
+        const saved = data.track.saved
         return (
             <div className="root">
                 <div className="divider"/>
@@ -99,6 +102,11 @@ class ExpandedContent extends Component {
                         <HeadSet style={{height: '1.4em', width: '1.4em', marginRight: '.6em' }}/>
                         {formatRelative(new Date(played_at), new Date())}
                     </div>
+                    {
+                        (saved || this.state.saved || this.state.saving) ?
+                            <div className="saved">{this.state.saving ? 'Saving...' : "Saved"}</div> :
+                            <Button onClick={this.saveTrack} size="small">Save</Button>
+                    }
                 </div>
                 {audio_features ? <AudioFeatures trackId={id}/>: null}
                 <Artists artists={artists}/>
@@ -152,7 +160,7 @@ class ExpandedContent extends Component {
     }
 }
 
-const ConnectedExpandedContent = graphql(query, graphalOptions)(ExpandedContent)
+const ConnectedExpandedContent = compose(graphql(query, graphalOptions), graphql(saveTrackMutation))(ExpandedContent)
 
 class Track extends Component {
     state = { expanded: false }

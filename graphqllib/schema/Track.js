@@ -14,6 +14,10 @@ const Track = `
         preview_url: String
         track_number: Int
         uri: String 
+        """
+        saved in the user's library
+        """
+        saved: Boolean
     }
 `
 

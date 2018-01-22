@@ -14,6 +14,24 @@ function serializeToURLParameters(obj) {
 }
 
 
+export async function saveTrackToLib(token, trackIds) {
+    const url = `https://api.spotify.com/v1/me/tracks?ids=${trackIds.toString()}`
+    return await fetch(url, {
+        method: 'PUT',
+        headers: makeHeaders(token)
+    })
+}
+
+export async function getSavedContains(token, trackIds) {
+    const url = `https://api.spotify.com/v1/me/tracks/contains?ids=${trackIds.toString()}`
+    let res = await fetch(url, {
+        method: 'GET',
+        headers: makeHeaders(token)
+    })
+    res = await res.json()
+    return res
+}
+
 export async function getFeaturedPlaylists(token, queryParams = {})
 {
     let res = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?${serializeToURLParameters(queryParams)}`, {
@@ -67,6 +85,16 @@ export async function getPlaylistTracks(token, { userId, playlistId, limit = 100
 export async function getAlbums(token, ids)
 {
     let res = await fetch (`https://api.spotify.com/v1/albums?ids=${ids.toString()}`, {
+        method: 'GET',
+        headers: makeHeaders(token)
+    })
+    res = await res.json();
+    return res;
+}
+
+export async function getTracks(token, ids)
+{
+    let res = await fetch (`https://api.spotify.com/v1/tracks?ids=${ids.toString()}`, {
         method: 'GET',
         headers: makeHeaders(token)
     })
@@ -132,6 +160,22 @@ export function makeArtistsLoader(token) {
     const batchLoadFn = async (keys) => {
         const { artists } = await getArtists(token, keys)
         return artists
+    }
+    return new Dataloader(batchLoadFn, { maxBatchSize: 50 })
+}
+
+export function makeTracksLoader(token) {
+    const batchLoadFn = async (keys) => {
+        const { tracks } = await getTracks(token, keys)
+        return tracks
+    }
+    return new Dataloader(batchLoadFn, { maxBatchSize: 50 })
+}
+
+export function makeSavedContainsLoader(token) {
+    const batchLoadFn = async (keys) => {
+        const saved = await getSavedContains(token, keys)
+        return saved
     }
     return new Dataloader(batchLoadFn, { maxBatchSize: 50 })
 }
