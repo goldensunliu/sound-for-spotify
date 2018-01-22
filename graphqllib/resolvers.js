@@ -28,6 +28,10 @@ export function makeResolvers(token) {
             artist: async(obj, {artistId}) => {
                 const artist = await ArtistLoader.load(artistId)
                 return artist
+            },
+            audioFeatures: async (obj, {id}) => {
+                const features = await AudioFeatureLoader.load(id)
+                return features
             }
         },
         Playlist: {

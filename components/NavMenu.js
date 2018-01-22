@@ -3,7 +3,6 @@ import { MenuStyles } from '../global-styles'
 import MenuSvg from '../images/menu.svg'
 import Link from 'next/link'
 import { bubble as Menu } from 'react-burger-menu'
-import { backGroundOrange } from '../utils/colors'
 
 const NavMenu = ({ isOpen }) => {
     return (

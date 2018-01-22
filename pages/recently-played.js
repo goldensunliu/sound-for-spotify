@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import NextHead from 'next/head'
 import Router from 'next/router'
 
-import Spinner from '../components/spinner'
 import Button from '../components/button'
 import LoadingFullScreen from '../components/LoadingFullScreen'
 
@@ -16,42 +15,23 @@ import NavMenu from '../components/NavMenu'
 import splitIntoPlaySessions from '../utils/splitIntoPlaySessions'
 
 const recentlyPlayed = gql`
-query recentlyPlayed($collapsed: Boolean!) {
+{
     recentlyPlayed {
 	    track {
 	        id
             name
             duration_ms
-            artists @skip(if: $collapsed){
+            artists {
                 name
-                genres
+                id
+            }
+            album {
+                name
                 images {
                     url
                     width
                     height
                 }
-            }
-            album @skip(if: $collapsed){
-                images {
-                    url
-                    width
-                    height
-                }
-            }
-            audio_features @skip(if: $collapsed){
-                acousticness
-                danceability
-                duration_ms
-                energy
-                instrumentalness
-                key
-                liveness
-                loudness
-                mode
-                speechiness
-                tempo
-                time_signature
-                valence
             }
 	    }
 	    played_at
@@ -60,12 +40,11 @@ query recentlyPlayed($collapsed: Boolean!) {
 `
 
 class Index extends Component {
-    state = {}
+    state = { collapseAll: false }
     static async getInitialProps ({req, res, query}) {
         checkLogin({req, res})
         return {
-            userAgent: req ? req.headers['user-agent'] : navigator.userAgent ,
-            collapseAll: !!query.collapseAll
+            userAgent: req ? req.headers['user-agent'] : navigator.userAgent
         }
     }
 
@@ -74,15 +53,12 @@ class Index extends Component {
     }
 
     toggleExpand = () => {
-        const { collapseAll  } = this.props
-        Router.push({
-            pathname: Router.pathname,
-            query: collapseAll ? null : { collapseAll: "true" }
-        })
+        this.setState({ collapseAll: !this.state.collapseAll })
     }
 
     renderSessions () {
-        const { data: { recentlyPlayed, loading }, collapseAll  } = this.props
+        const { data: { recentlyPlayed, loading }  } = this.props
+        const { collapseAll } = this.state
         const sessions = splitIntoPlaySessions(recentlyPlayed).map(session => {
             return session
         })
@@ -91,7 +67,7 @@ class Index extends Component {
                 <div>
                     <Button onClick={this.toggleExpand}>{ collapseAll ? 'Expand All' : 'Collapse All'}</Button>
                 </div>
-                {sessions.map((session, i) => <Session key={i} session={session} collapse={!collapseAll && loading ? true : collapseAll}/>)}
+                {sessions.map((session, i) => <Session key={i} session={session} collapse={collapseAll}/>)}
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
@@ -133,4 +109,4 @@ const graphqlOptions = {
   },
 }
 
-export default withData(graphql(recentlyPlayed, graphqlOptions)(Index))
+export default withData(graphql(recentlyPlayed)(Index))

@@ -5,9 +5,9 @@ import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
 import Fade from '../components/transitions/fade'
 
-const SessionDivider = ({playedAt, now, length }) => {
+const SessionDivider = ({playedAt, now, length, toggleExpand }) => {
     return (
-        <div className="root">
+        <div className="root" onClick={toggleExpand}>
             <div className="top">
                 <div>{`Session ${formatRelative(playedAt, now)}`}</div>
                 <div>{`${length} ${length > 1 ? 'Songs' : 'Song'}`}</div>
@@ -16,6 +16,7 @@ const SessionDivider = ({playedAt, now, length }) => {
             <style jsx>{`
                 .root {
                     width: 100%;
+                    cursor: pointer;
                 }
                 .top {
                     color: white;
@@ -32,35 +33,43 @@ const SessionDivider = ({playedAt, now, length }) => {
     )
 }
 
-// TODO in order for each session to have its own control over expanded state, this component will
-// need to connect with graphql since right now it is being passed from the parent
 export default class Session extends Component {
+    state = {
+        expanded : true
+    }
     constructor (props) {
         super(props)
+        this.state.expanded = !props.collapse
+    }
+
+    componentWillReceiveProps({ collapse }) {
+        if (this.props.collapse  != collapse)
+        {
+            this.setState({ expanded: !collapse })
+        }
     }
 
     renderTracks() {
         const { session } = this.props
         return (
-
             session.map((history, i) => {
                 return <Track key={i} {...history}/>
             })
-
         )
     }
 
     render() {
-        const { session, collapse } = this.props
+        const { session } = this.props
+        const { expanded } = this.state
         const { played_at } = session[session.length - 1]
         const now = new Date();
         return (
-            <div className={`root${!collapse ? '' : ' collapsed'}`}>
+            <div className={`root${!expanded ? '' : ' collapsed'}`}>
                 {
-                    <SessionDivider playedAt={new Date(played_at)} now={now} length={session.length}/>
+                    <SessionDivider toggleExpand={() => {this.setState({ expanded: !this.state.expanded})}} playedAt={new Date(played_at)} now={now} length={session.length}/>
                 }
-                <Fade in={!collapse}>
-                    {!collapse && this.renderTracks()}
+                <Fade in={expanded}>
+                    {expanded && this.renderTracks()}
                 </Fade>
                 { /*language=CSS*/ }
                 <style jsx>{`

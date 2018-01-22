@@ -30,6 +30,10 @@ const RootQuery = `
     Get an artist
     """
     artist(artistId: String!): Artist
+    """
+    Get audio features of a track
+    """
+    audioFeatures(id: String!): AudioFeatures
     
   }
 `;

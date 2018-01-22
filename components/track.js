@@ -1,97 +1,27 @@
 import React, {Component} from 'react'
-import Image from 'react-image'
 import {formatRelative} from 'date-fns'
 import Color from 'color'
-import Popover from 'react-popover'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 
 import Grow from "./transitions/grow"
 import { backGroundOrange, backGroundGrey } from '../utils/colors'
-import { AttributeConfig } from '../utils/AttributeConfig'
+import ImageWithLoader from '../components/ImageWithLoader'
+import Artist from '../components/Artist'
+import AudioFeatures from '../components/AudioFeatures'
 import Spinner from '../components/spinner'
-
 import HeadSet from '../images/headset.svg'
 import Expand from '../images/expand-more.svg'
-import Battery from '../images/battery-with-a-bolt.svg'
-import DiscoBall from '../images/disco-ball.svg'
-import Metronome from '../images/metronome.svg'
-import Positivity from '../images/positivity.svg'
-import Guitar from '../images/acoustic-guitar.svg'
-import Chat from '../images/chat.svg'
-import Hand from '../images/hand.svg'
 
 const FontColor = Color("#FBE9E7").negate()
 
 const PitchClasses = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-class WithExplainationPopover extends React.Component {
-    state = { open: false }
-    handleClose = () => {
-        this.setState({open: false});
-    };
-    toggleOpen = (event) => {
-        // This prevents ghost click.
-        event.preventDefault();
-        this.setState({open: !this.state.open});
-    }
-    render() {
-        const { label, explanation } = AttributeConfig[this.props.attributeKey];
-        const body = (
-            <div>
-                <div className="headline">{label}</div>
-                <div className="content">{explanation}</div>
-                {/*language=CSS*/}
-                <style jsx>{`
-                    .headline {
-                        font-size: 1.5em;
-                        line-height: 32px;
-                    }
-                    .content {
-                        text-align: justify;
-                    }
-                `}</style>
-            </div>
-        )
-        return (
-            <Popover style={{ width: '80vw', maxWidth: '20em' }} preferPlace="below" body={body} onOuterAction={this.handleClose}
-                     isOpen={this.state.open} refreshIntervalMs={300}>
-                <div onClick={this.toggleOpen}>
-                    {this.props.render(this.state)}
-                </div>
-            </Popover>
-        )
-    }
-}
-
-const GenreRow = ({genres}) => {
-    return (
-        <div className="genre-row">
-            {genres.map((g, i) => <div className="pill" key={i}>{g}</div>)}
-            {/*language=CSS*/}
-            <style jsx>{`
-                .genre-row {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-                .pill {
-                    flex-shrink: 0;
-                    display: flex;
-                }
-            `}</style>
-        </div>
-    )
-}
-
 const Artists = ({artists}) => {
     return (
         <div className="artists">
-            {artists.map(({name, genres, images}, i) => (
-                <div className="artist" key={i}>
-                    <ArtistAvatar images={images}/>
-                    <div>
-                        <div className="name">{name}</div>
-                        <GenreRow genres={genres}/>
-                    </div>
-                </div>
+            {artists.map((artist, i) => (
+                <Artist {...artist} key={i}/>
             ))}
             {/*language=CSS*/}
             <style jsx>{`
@@ -115,71 +45,24 @@ const Artists = ({artists}) => {
     )
 }
 
-const Attributes = ({audio_features}) => {
-    return (
-        <div className="root">
-            <WithExplainationPopover attributeKey="energy" render={(state) => (
-                <div className="attribute">
-                    <Battery/>
-                    <div>{Math.round(audio_features.energy * 10)}/10</div>
-                </div>
-            )}/>
-            <WithExplainationPopover attributeKey="danceability" render={(state) => (
-                <div className="attribute">
-                    <DiscoBall/>
-                    <div>{Math.round(audio_features.danceability * 10)}/10</div>
-                </div>
-            )}/>
-            <WithExplainationPopover attributeKey="tempo" render={(state) => (
-                <div className="attribute">
-                    <Metronome/>
-                    <div>{Math.round(audio_features.tempo)}BPM</div>
-                </div>
-            )}/>
-            <WithExplainationPopover attributeKey="valence" render={(state) => (
-                <div className="attribute">
-                    <Positivity/>
-                    <div>{Math.round(audio_features.valence * 10)}/10</div>
-                </div>
-            )}/>
-            <WithExplainationPopover attributeKey="acousticness" render={(state) => (
-                <div className="attribute">
-                    <Guitar/>
-                    <div>{Math.round(audio_features.acousticness * 10)}/10</div>
-                </div>
-            )}/>
-            <WithExplainationPopover attributeKey="liveness" render={(state) => (
-                <div className="attribute">
-                    <Hand/>
-                    <div>{Math.round(audio_features.liveness * 10)}/10</div>
-                </div>
-            )}/>
+const query = gql`
+query audioFeatures($id: String!) {
+  audioFeatures(id: $id) {
+    key
+    mode
+    time_signature
+  }
+}
+`
 
-            <WithExplainationPopover attributeKey="speechiness" render={(state) => (
-                <div className="attribute">
-                    <Chat/>
-                    <div>{Math.round(audio_features.speechiness * 10)}/10</div>
-                </div>
-            )}/>
-            {/*language=CSS*/}
-            <style jsx>{`
-                .root {
-                    display: flex;
-                    justify-content: space-around;
-                }
-                .attribute {
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    cursor: pointer;
-                }
-                .attribute :global(svg) {
-                    height: 30px;
-                    width: 30px;
-                }
-            `}</style>
-        </div>
-    )
+const graphalOptions = {
+    options: ({ track : { id } }) => {
+        return {
+            variables: {
+                id: id
+            }
+        }
+    },
 }
 
 class ExpandedContent extends Component {
@@ -205,7 +88,9 @@ class ExpandedContent extends Component {
     }
 
     render() {
-        const { played_at, track : { audio_features, artists } } = this.props;
+        const { played_at, track : { id, artists }, data } = this.props;
+        if (data.loading) return <Spinner/>
+        const audio_features = data.audioFeatures
         return (
             <div className="root">
                 <div className="divider"/>
@@ -215,7 +100,7 @@ class ExpandedContent extends Component {
                         {formatRelative(new Date(played_at), new Date())}
                     </div>
                 </div>
-                {audio_features ? <Attributes audio_features={audio_features}/>: null}
+                {audio_features ? <AudioFeatures trackId={id}/>: null}
                 <Artists artists={artists}/>
                 <div className="music-stuff">
                     <div className="pill">{PitchClasses[audio_features.key]} {audio_features.mode ? 'Major' : 'Minor'}</div>
@@ -267,34 +152,7 @@ class ExpandedContent extends Component {
     }
 }
 
-const ArtistAvatar = ({images}) => {
-    if (images && images.length) {
-        const image = images[0]
-        return <ImageWithLoader url={image.url} style={{ width: '4em', height: '4em', borderRadius: '50%', overflow: 'hidden' }}/>
-    }
-}
-
-const ImageWithLoader = ({url, style}) => (
-    <div className="image-with-loader" style={style}>
-        <Image src={url} loader={<Spinner/>}/>
-        { /*language=CSS*/ }
-        <style jsx>{`
-            .image-with-loader {
-                display: grid;
-            }
-            .image-with-loader :global(.spinner) {
-                width: 100%;
-            }
-            .image-with-loader :global(img) {
-                width: 100%;
-                height: 100%;
-                border-radius: 2px;
-                object-fit: cover;
-            }
-        `}
-        </style>
-    </div>
-)
+const ConnectedExpandedContent = graphql(query, graphalOptions)(ExpandedContent)
 
 class Track extends Component {
     state = { expanded: false }
@@ -318,7 +176,7 @@ class Track extends Component {
                     <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>
                 </div>
                 <Grow in={expanded} maxHeight={500}>
-                    <ExpandedContent {...this.props}/>
+                    <ConnectedExpandedContent {...this.props}/>
                 </Grow>
                 { /*language=CSS*/ }
                 <style jsx>{`
