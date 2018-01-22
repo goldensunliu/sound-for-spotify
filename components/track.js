@@ -4,7 +4,6 @@ import {formatRelative} from 'date-fns'
 import Color from 'color'
 import Popover from 'react-popover'
 
-import Button from '../components/button'
 import Grow from "./transitions/grow"
 import { backGroundOrange, backGroundGrey } from '../utils/colors'
 import { AttributeConfig } from '../utils/AttributeConfig'
@@ -85,8 +84,8 @@ const GenreRow = ({genres}) => {
 const Artists = ({artists}) => {
     return (
         <div className="artists">
-            {artists.map(({name, genres, images}) => (
-                <div className="artist">
+            {artists.map(({name, genres, images}, i) => (
+                <div className="artist" key={i}>
                     <ArtistAvatar images={images}/>
                     <div>
                         <div className="name">{name}</div>
@@ -300,7 +299,7 @@ const ImageWithLoader = ({url, style}) => (
 class Track extends Component {
     state = { expanded: false }
     render() {
-        const {track } = this.props;
+        const { track } = this.props;
         const { expanded } = this.state
         const { artists, album } = track;
         const artistName = artists && artists[0].name
@@ -348,6 +347,7 @@ class Track extends Component {
                         display: flex;
                         align-items: center;
                         flex: 1;
+                        overflow: hidden;
                     }
                     .avatar-and-track :global(img) {
                         width: 4em;

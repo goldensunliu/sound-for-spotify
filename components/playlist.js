@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { formatRelative } from 'date-fns'
 
 import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
-import Fade from '../components/transitions/fade'
 
-const SessionDivider = ({playedAt, now, length }) => {
+const Divider = ({name, totalTracks}) => {
     return (
         <div className="root">
             <div className="top">
-                <div>{`Session ${formatRelative(playedAt, now)}`}</div>
-                <div>{`${length} ${length > 1 ? 'Songs' : 'Song'}`}</div>
+                <div>{name}</div>
+                <div>{`Total ${totalTracks} ${totalTracks > 1 ? 'Songs' : 'Song'}`}</div>
             </div>
             { /*language=CSS*/ }
             <style jsx>{`
@@ -32,36 +30,28 @@ const SessionDivider = ({playedAt, now, length }) => {
     )
 }
 
-// TODO in order for each session to have its own control over expanded state, this component will
-// need to connect with graphql since right now it is being passed from the parent
-export default class Session extends Component {
+
+export default class Playlist extends Component {
+    state = { expanded : true }
     constructor (props) {
         super(props)
     }
 
     renderTracks() {
-        const { session } = this.props
-        return (
-
-            session.map((history, i) => {
-                return <Track key={i} {...history}/>
-            })
-
-        )
+        const { tracks } = this.props
+        return tracks.items.map(({ track }, i) => {
+                return <Track key={i} track={track}/>
+        })
     }
 
     render() {
-        const { session, collapse } = this.props
-        const { played_at } = session[session.length - 1]
-        const now = new Date();
+        const { name, totalTracks } = this.props
         return (
-            <div className={`root${!collapse ? '' : ' collapsed'}`}>
+            <div className="root">
                 {
-                    <SessionDivider playedAt={new Date(played_at)} now={now} length={session.length}/>
+                    <Divider name={name} totalTracks={totalTracks}/>
                 }
-                <Fade in={!collapse}>
-                    {!collapse && this.renderTracks()}
-                </Fade>
+                {this.renderTracks()}
                 { /*language=CSS*/ }
                 <style jsx>{`
                         .root {
@@ -73,9 +63,6 @@ export default class Session extends Component {
                             margin-bottom: 15px;
                             overflow: hidden;
                             transition: box-shadow 300ms ease-in-out;
-                        }
-                        .root.collapsed {
-                            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                         }
                     `}
                 </style>

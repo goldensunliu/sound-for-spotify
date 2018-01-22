@@ -20,6 +20,10 @@ export function makeResolvers(token) {
             recentlyPlayed: async () => {
                 const { items } = await getRecentlyPlayed(token)
                 return items
+            },
+            playlist: async(obj, {playlistId, userId}) => {
+                const playlistFull = await PlaylistLoader.load({ playlistId, userId })
+                return playlistFull
             }
         },
         Playlist: {

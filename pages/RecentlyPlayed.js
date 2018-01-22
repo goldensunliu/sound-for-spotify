@@ -2,46 +2,27 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import NextHead from 'next/head'
+import Router from 'next/router'
+
+import Spinner from '../components/spinner'
+import Button from '../components/button'
+import LoadingFullScreen from '../components/LoadingFullScreen'
 
 import Session from '../components/session'
 import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
 import NavMenu from '../components/NavMenu'
-
-// TODO test
-const splitIntoPlaySessions = (history) => {
-    let sessions = []
-    let currentPlaySession;
-    history.forEach((playedData, i) => {
-        const { track, played_at } = playedData
-        if (!currentPlaySession) {
-            currentPlaySession = [playedData]
-            return
-        }
-        const nextPlayedAt = history[i-1] && new Date(history[i-1].played_at)
-        if (nextPlayedAt) {
-            if ((new Date(played_at).getTime() + track.duration_ms + 400000) < nextPlayedAt.getTime()) {
-                sessions.push(currentPlaySession)
-                currentPlaySession = []
-            }
-        }
-        currentPlaySession.push(playedData)
-        if (i === history.length - 1) {
-            sessions.push(currentPlaySession)
-        }
-    })
-    return sessions
-}
+import splitIntoPlaySessions from '../utils/splitIntoPlaySessions'
 
 const recentlyPlayed = gql`
-{
+query recentlyPlayed($collapsed: Boolean!) {
     recentlyPlayed {
 	    track {
 	        id
             name
             duration_ms
-            artists {
+            artists @skip(if: $collapsed){
                 name
                 genres
                 images {
@@ -50,14 +31,14 @@ const recentlyPlayed = gql`
                     height
                 }
             }
-            album {
+            album @skip(if: $collapsed){
                 images {
                     url
                     width
                     height
                 }
             }
-            audio_features {
+            audio_features @skip(if: $collapsed){
                 acousticness
                 danceability
                 duration_ms
@@ -82,21 +63,35 @@ class Index extends Component {
     state = {}
     static async getInitialProps ({req, res, query}) {
         checkLogin({req, res})
-        return { userAgent: req ? req.headers['user-agent'] : navigator.userAgent }
+        return {
+            userAgent: req ? req.headers['user-agent'] : navigator.userAgent ,
+            collapseAll: !!query.collapseAll
+        }
     }
 
     constructor (props) {
         super(props)
     }
 
+    toggleExpand = () => {
+        const { collapseAll  } = this.props
+        Router.push({
+            pathname: Router.pathname,
+            query: collapseAll ? null : { collapseAll: "true" }
+        })
+    }
+
     renderSessions () {
-        const { data: { recentlyPlayed } } = this.props
+        const { data: { recentlyPlayed, loading }, collapseAll  } = this.props
         const sessions = splitIntoPlaySessions(recentlyPlayed).map(session => {
             return session
         })
         return (
             <div>
-                {sessions.map((session, i) => <Session key={i} session={session}/>)}
+                <div>
+                    <Button onClick={this.toggleExpand}>{ collapseAll ? 'Expand All' : 'Collapse All'}</Button>
+                </div>
+                {sessions.map((session, i) => <Session key={i} session={session} collapse={!collapseAll && loading ? true : collapseAll}/>)}
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
@@ -120,11 +115,22 @@ class Index extends Component {
                     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
                 </NextHead>
                 <NavMenu/>
-                {this.props.data.recentlyPlayed ? this.renderSessions() : null}
+                {this.props.data.recentlyPlayed ? this.renderSessions() : <LoadingFullScreen/>}
                 <style jsx global>{GlobalStyles}</style>
             </div>
         )
     }
 }
 
-export default withData(graphql(recentlyPlayed)(Index))
+const graphqlOptions = {
+  options: (props) => {
+      const collapsed = props.collapseAll
+      return {
+          variables: {
+              collapsed: collapsed
+          }
+      }
+  },
+}
+
+export default withData(graphql(recentlyPlayed, graphqlOptions)(Index))

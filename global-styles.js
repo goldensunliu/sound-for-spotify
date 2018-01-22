@@ -46,7 +46,7 @@ body {
 }
 
 .bm-burger-button * {
-    fill: ${Color(backGroundOrange).lighten(.2).hsl().string()}
+    fill: ${backGroundOrange}
 }
 @media (min-width: 600px) {
     body { font-size: 15px; }
