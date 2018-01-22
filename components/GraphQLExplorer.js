@@ -1,8 +1,9 @@
 import GraphiQL from 'graphiql'
 import fetch from 'isomorphic-fetch'
 
-import NavMenu from './components/NavMenu'
+import NavMenu from './NavMenu'
 
+// TODO make isomorphic, should be easy
 function graphQLFetcher(graphQLParams) {
     return fetch(window.location.origin + '/graphql', {
         method: 'post',

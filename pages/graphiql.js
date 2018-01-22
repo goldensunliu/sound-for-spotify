@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import checkLogin from '../utils/checkLogin'
 
-import GraphQLExplorer from '../GraphQLExplorer'
+import GraphQLExplorer from '../components/GraphQLExplorer'
 
 export default class Index extends Component {
     state = {}
