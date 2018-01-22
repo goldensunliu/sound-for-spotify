@@ -14,7 +14,7 @@ import NavMenu from '../components/NavMenu'
 
 const Summary = ({name, totalTracks, id, owner : { display_name, id : ownerId }}) => {
     return (
-        <Link href={`/Playlist?id=${id}&ownerId=${ownerId}`}>
+        <Link href={`/playlist?id=${id}&ownerId=${ownerId}`}>
             <a className="root">
                 <div className="top">
                     <div>{`${name} (${totalTracks} ${totalTracks > 1 ? 'Songs' : 'Song'})`}</div>
