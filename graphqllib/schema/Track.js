@@ -14,6 +14,7 @@ const Track = `
         preview_url: String
         track_number: Int
         uri: String 
+        external_urls: ExternalUrls
         """
         saved in the user's library
         """

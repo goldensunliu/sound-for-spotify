@@ -10,7 +10,7 @@ import { backGroundOrange } from '../utils/colors'
 import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu from '../components/NavMenu'
+import NavMenu, { Footer } from '../components/NavMenu'
 
 const Summary = ({name, totalTracks, id, owner : { display_name, id : ownerId }}) => {
     return (
@@ -106,6 +106,7 @@ class Index extends Component {
                 </NextHead>
                 <NavMenu/>
                 {this.props.data.featuredPlaylists ? this.renderSessions() : <LoadingFullScreen/>}
+                <Footer/>
                 <style jsx global>{GlobalStyles}</style>
             </div>
         )

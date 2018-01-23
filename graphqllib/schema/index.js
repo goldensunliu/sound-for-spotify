@@ -8,6 +8,7 @@ import Artist from './Artist'
 import Paging from './Paging'
 import AudioFeatures from './AudioFeatures'
 import PlayHistory from './PlayHistory'
+import ExternalUrls from './ExternalUrls'
 
 const SchemaDefinition = `
   schema {
@@ -49,6 +50,6 @@ const RootQuery = `
 `;
 
 const typeDefs = [SchemaDefinition, RootQuery, Playlist, Image, User, PlaylistTrack, Track, Album, Artist, Paging,
-    AudioFeatures, PlayHistory];
+    AudioFeatures, PlayHistory, ExternalUrls];
 
 export default typeDefs

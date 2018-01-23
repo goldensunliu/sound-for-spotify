@@ -172,7 +172,7 @@ class Track extends Component {
     render() {
         const { track } = this.props;
         const { expanded } = this.state
-        const { artists, album } = track;
+        const { artists, album, external_urls : { spotify } } = track;
         const artistName = artists && artists[0].name
         const albumName = album && album.name
         const coverUrl = album.images && album.images.length && album.images[album.images.length - 1]
@@ -180,7 +180,7 @@ class Track extends Component {
             <div className="wrapper">
                 <div className="track-row" onClick={() => { this.setState({ expanded: !expanded })}}>
                     <div className="avatar-and-track">
-                        <ImageWithLoader url={coverUrl.url} style={{ width: '4em', flexShrink: 0, height: '4em' }}/>
+                        <a href={spotify} target="_blank"><ImageWithLoader url={coverUrl.url} style={{ width: '4em', flexShrink: 0, height: '4em' }}/></a>
                         <div className="truncate flex-column track-info">
                             <div className="truncate" style={{marginBottom: '.3em', fontWeight: 500 }}>{track.name}</div>
                             <div className="truncate" style={{color: FontColor.fade(.3).hsl().string() }}>{artistName} | {albumName}</div>

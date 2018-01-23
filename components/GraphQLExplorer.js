@@ -1,7 +1,7 @@
 import GraphiQL from 'graphiql'
 import fetch from 'isomorphic-fetch'
 
-import NavMenu from './NavMenu'
+import NavMenu, { Footer } from './NavMenu'
 
 // TODO make isomorphic, should be easy
 function graphQLFetcher(graphQLParams) {
@@ -17,6 +17,7 @@ const GraphQLExplorer = (
     <div className="root">
         <NavMenu/>
         <GraphiQL fetcher={graphQLFetcher} />
+        <Footer/>
         { /*language=CSS*/ }
         <style jsx>{`.root { height: 100vh }`}</style>
         { /*language=CSS*/ }

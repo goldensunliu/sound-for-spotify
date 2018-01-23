@@ -10,7 +10,7 @@ import LoadingFullScreen from '../components/LoadingFullScreen'
 import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu from '../components/NavMenu'
+import NavMenu, { Footer } from '../components/NavMenu'
 
 const playlistQuery = gql`
 query playlist($userId: String!, $playlistId: String!) {
@@ -23,6 +23,9 @@ query playlist($userId: String!, $playlistId: String!) {
           track {
 	        id
             name
+            external_urls {
+              spotify
+            }
             duration_ms
             artists {
                 name
@@ -88,6 +91,7 @@ class Index extends Component {
                 </NextHead>
                 <NavMenu/>
                 {this.props.data.playlist ? this.renderPlaylist() : <LoadingFullScreen/>}
+                <Footer/>
                 <style jsx global>{GlobalStyles}</style>
             </div>
         )

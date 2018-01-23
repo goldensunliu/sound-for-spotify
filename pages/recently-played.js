@@ -10,7 +10,7 @@ import Session from '../components/session'
 import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu from '../components/NavMenu'
+import NavMenu, { Footer } from '../components/NavMenu'
 import splitIntoPlaySessions from '../utils/splitIntoPlaySessions'
 
 const recentlyPlayed = gql`
@@ -19,6 +19,9 @@ const recentlyPlayed = gql`
 	    track {
 	        id
             name
+            external_urls {
+              spotify
+            }
             duration_ms
             artists {
                 name
@@ -91,6 +94,7 @@ class Index extends Component {
                 </NextHead>
                 <NavMenu/>
                 {this.props.data.recentlyPlayed ? this.renderSessions() : <LoadingFullScreen/>}
+                <Footer/>
                 <style jsx global>{GlobalStyles}</style>
             </div>
         )
