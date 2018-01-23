@@ -12,7 +12,7 @@ function checkLogin({req, res}) {
         }
     }
     else if (!Cookies.get('spotify-token')) {
-        Router.replace(`/login?returnTo=${encodeURIComponent(window.location.pathname)}`)
+        Router.replace(`/login?returnTo=${encodeURIComponent(window.location.pathname+window.location.search)}`)
         return
     }
 }
