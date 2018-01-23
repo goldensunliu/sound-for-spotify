@@ -21,47 +21,30 @@ query playlist($userId: String!, $playlistId: String!) {
       items {
         ... on PlaylistTrack {
           track {
-            id
+	        id
             name
             duration_ms
             artists {
-              name
-              genres
-              images {
-                url
-                width
-                height
-              }
+                name
+                id
             }
             album {
-              images {
-                url
-                width
-                height
-              }
-            }
-            audio_features {
-              acousticness
-              danceability
-              duration_ms
-              energy
-              instrumentalness
-              key
-              liveness
-              loudness
-              mode
-              speechiness
-              tempo
-              time_signature
-              valence
+                name
+                images {
+                    url
+                    width
+                    height
+                }
             }
           }
         }
       }
+      limit
+      offset
+      total
     }
   }
 }
-
 `
 
 class Index extends Component {
@@ -112,15 +95,15 @@ class Index extends Component {
 }
 
 const graphqlOptions = {
-  options: (props) => {
-      const { id, ownerId } = props
-      return {
-          variables: {
-              userId: ownerId,
-              playlistId: id
-          }
-      }
-  },
+    options: (props) => {
+        const { id, ownerId } = props
+        return {
+            variables: {
+                userId: ownerId,
+                playlistId: id
+            }
+        }
+    }
 }
 
 export default withData(graphql(playlistQuery, graphqlOptions)(Index))

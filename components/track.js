@@ -79,6 +79,7 @@ const graphalOptions = {
     },
 }
 
+
 class ExpandedContent extends Component {
     state = {}
 
@@ -99,10 +100,13 @@ class ExpandedContent extends Component {
             <div className="root">
                 <div className="divider"/>
                 <div className="played-at-row">
-                    <div className="played-at-info">
-                        <HeadSet style={{height: '1.4em', width: '1.4em', marginRight: '.6em' }}/>
-                        {formatRelative(new Date(played_at), new Date())}
-                    </div>
+                    { played_at ? (
+                        <div className="played-at-info">
+                            <HeadSet style={{height: '1.4em', width: '1.4em', marginRight: '.6em' }}/>
+                            {formatRelative(new Date(played_at), new Date())}
+                        </div>) :
+                        <div className="played-at-info"/>
+                    }
                     {
                         (saved || this.state.saved || this.state.saving) ?
                             <div className="saved">{this.state.saving ? 'Saving...' : "Saved"}</div> :

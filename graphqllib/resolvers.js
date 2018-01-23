@@ -56,8 +56,24 @@ export function makeResolvers(token) {
                 return total
             },
             tracks: async (obj, args) => {
-                const {id: playlistId , owner: { id: userId }} = obj
-                return await PlaylistTracksLoader.load({playlistId, userId, ...args })
+                const { id: playlistId , owner: { id: userId }, tracks: { total, offset, items, limit }} = obj
+                // fetch with limit and offset when specified
+                if (args.limit && args.offset) {
+                    return await PlaylistTracksLoader.load({playlistId, userId, ...args })
+                }
+                // otherwise always fetch all of the tracks
+                let currentOffset = items.length;
+                let fetches = []
+                while (currentOffset < total ) {
+                    fetches.push(PlaylistTracksLoader.load({playlistId, userId, limit, offset: currentOffset }))
+                    currentOffset = currentOffset + limit;
+                }
+                const fetchResults = await Promise.all(fetches);
+                let allItems = items
+                fetchResults.forEach((result) => {
+                    allItems = allItems.concat(result.items)
+                })
+                return { total, items: allItems, limit: total, offset }
             }
         },
         Track: {
