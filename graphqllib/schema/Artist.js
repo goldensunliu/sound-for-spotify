@@ -8,6 +8,7 @@ const Artist = `
         name: String
         popularity: Int
         genres: [String]
+        external_urls: ExternalUrls
     }
 `;
 

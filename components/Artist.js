@@ -15,6 +15,9 @@ query artist($id: String!) {
       width
       height
     }
+    external_urls {
+      spotify
+    }
   }
 }
 `
@@ -58,10 +61,11 @@ const GenreRow = ({genres}) => {
 
 const Artist = ({data}) => {
     if (data.loading) return <Spinner/>
-    const {name, genres, images} = data.artist
+    const {name, genres, images, external_urls: { spotify }} = data.artist
     return (
         <div className="artist">
-            <ArtistAvatar images={images}/>
+            <a href={spotify} target="_blank">
+                <ArtistAvatar images={images}/></a>
             <div>
                 <div className="name">{name}</div>
                 <GenreRow genres={genres}/>
