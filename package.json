@@ -29,6 +29,7 @@
     "express-graphql": "^0.6.11",
     "graphiql": "^0.11.11",
     "graphql": "git://github.com/graphql/graphql-js.git#npm",
+    "graphql-spotify": "^0.4.141",
     "graphql-tools": "^2.18.0",
     "next": "^4.2.3",
     "path": "^0.12.7",

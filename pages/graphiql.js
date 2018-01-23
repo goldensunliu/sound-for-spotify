@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import checkLogin from '../utils/checkLogin'
+import Layout from '../components/Layout'
 
 import GraphQLExplorer from '../components/GraphQLExplorer'
 
@@ -19,6 +20,10 @@ export default class Index extends Component {
     }
 
     render () {
-        return this.state.mounted ? GraphQLExplorer : "Loading"
+        return (
+            <Layout name="GraphQLExplorer for Spotify">
+                {this.state.mounted ? GraphQLExplorer : "Loading"}
+            </Layout>
+        )
     }
 }

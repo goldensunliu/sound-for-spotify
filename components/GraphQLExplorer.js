@@ -1,8 +1,6 @@
 import GraphiQL from 'graphiql'
 import fetch from 'isomorphic-fetch'
 
-import NavMenu, { Footer } from './NavMenu'
-
 // TODO make isomorphic, should be easy
 function graphQLFetcher(graphQLParams) {
     return fetch(window.location.origin + '/graphql', {
@@ -15,11 +13,14 @@ function graphQLFetcher(graphQLParams) {
 
 const GraphQLExplorer = (
     <div className="root">
-        <NavMenu/>
         <GraphiQL fetcher={graphQLFetcher} />
-        <Footer/>
         { /*language=CSS*/ }
-        <style jsx>{`.root { height: 100vh }`}</style>
+        <style jsx>{`
+            .root {
+                width: 100vw;
+                height: calc(100vh - 42.25px);
+            }
+        `}</style>
         { /*language=CSS*/ }
         <style jsx global>{`
             .bm-burger-button {

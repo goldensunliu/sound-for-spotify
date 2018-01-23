@@ -36,6 +36,9 @@ module.exports = {
         colors: true
     },
     target: "node",
-    externals: [nodeExternals()],
+    externals: [nodeExternals({
+        // take advantage of ES6 friendly modules for tree shaking
+        whitelist: ['graphql-spotify']
+    })],
     devtool: 'source-map'
 };

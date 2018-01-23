@@ -4,24 +4,12 @@ import { graphqlExpress } from 'apollo-server-express';
 import compression from 'compression'
 import next from 'next'
 import cookieParser from 'cookie-parser'
-
-import { makeSchema } from './graphqllib'
+import { makeSchema } from "graphql-spotify";
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 const port = parseInt(process.env.PORT, 10) || 3000
-
-const checkLogin = (req, res, next) => {
-        if (!req.cookies['spotify-token'])
-        {
-            res.redirect('/login')
-        }
-        else
-        {
-            next()
-        }
-    }
 
 async function start() {
     await app.prepare()

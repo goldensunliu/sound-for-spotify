@@ -1,4 +1,4 @@
-import { CLIENT_ID, scopes } from "../graphqllib/spotify-config";
+import { CLIENT_ID, scopes } from "../spotify-config";
 import Button from './button'
 
 function redirectToLogin() {
@@ -46,8 +46,7 @@ export const PendingState = ({needLogin, loading}) => {
             { /*language=CSS*/ }
             <style jsx>{`
                 .root {
-                    height: 100vh;
-                    width: 100vw;
+                    flex: 1;
                     display: flex;
                     align-items: center;
                     justify-content: center;

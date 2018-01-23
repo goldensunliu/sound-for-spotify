@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 
+import Layout from '../components/Layout'
 import { PendingState, getParamsFromHash } from '../components/LoginComponents'
 
 function tryGettingTokenFromImplicit() {
@@ -35,6 +36,10 @@ export default class Index extends Component {
     }
 
     render () {
-        return <PendingState needLogin/>
+        return (
+            <Layout name="Login To Explore Spotify API the GraphQL Way!">
+                <PendingState needLogin/>
+            </Layout>
+        )
     }
 }

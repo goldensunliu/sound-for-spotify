@@ -8,7 +8,6 @@ const Divider = ({name, totalTracks}) => {
         <div className="root">
             <div className="top">
                 <div>{name}</div>
-                <div>{`Total ${totalTracks} ${totalTracks > 1 ? 'Songs' : 'Song'}`}</div>
             </div>
             { /*language=CSS*/ }
             <style jsx>{`
@@ -59,10 +58,14 @@ export default class Playlist extends Component {
                             border-bottom: .5em solid ${backGroundOrange};
                             border-radius: 6px;
                             width: 100%;
-                            max-width: 600px;
                             margin-bottom: 15px;
                             overflow: hidden;
                             transition: box-shadow 300ms ease-in-out;
+                        }
+                        @media (min-width: 800px) {
+                            .root {
+                                width: 600px;
+                            }
                         }
                     `}
                 </style>

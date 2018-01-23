@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import NextHead from 'next/head'
 
-import Playlist from '../components/playlist'
+import Playlist from '../components/Playlist'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
 
-import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu, { Footer } from '../components/NavMenu'
+import Layout from '../components/Layout'
 
 const playlistQuery = gql`
 query playlist($userId: String!, $playlistId: String!) {
   playlist(userId: $userId, playlistId: $playlistId) {
     name
     totalTracks
+    images {
+        url
+        width
+        height
+    }
     tracks {
       items {
         ... on PlaylistTrack {
@@ -75,6 +78,7 @@ class Index extends Component {
                         flex-direction: column;
                         align-items: center;
                         padding: .5em;
+                        width: 100%;
                     }
                 `}</style>
             </div>)
@@ -82,18 +86,9 @@ class Index extends Component {
 
     render() {
         return (
-            <div>
-                <NextHead>
-                    <title>View Spotify Featured Playlists</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
-                </NextHead>
-                <NavMenu/>
+            <Layout name="Playlist Details">
                 {this.props.data.playlist ? this.renderPlaylist() : <LoadingFullScreen/>}
-                <Footer/>
-                <style jsx global>{GlobalStyles}</style>
-            </div>
+            </Layout>
         )
     }
 }
@@ -107,6 +102,9 @@ const graphqlOptions = {
                 playlistId: id
             }
         }
+    },
+    props: (props) => {
+        return props
     }
 }
 

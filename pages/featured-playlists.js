@@ -1,49 +1,56 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import NextHead from 'next/head'
 import Link from 'next/link'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
+import ImageWithLoader from '../components/ImageWithLoader'
+import Layout from '../components/Layout'
 import { backGroundOrange } from '../utils/colors'
 
-import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu, { Footer } from '../components/NavMenu'
 
-const Summary = ({name, totalTracks, id, owner : { display_name, id : ownerId }}) => {
+const Summary = (props) => {
+    const { totalTracks, id, images, owner : { id : ownerId }, external_urls : { spotify }} = props
+    const image = images && images[0]
     return (
-        <Link href={`/playlist?id=${id}&ownerId=${ownerId}`}>
-            <a className="root">
-                <div className="top">
-                    <div>{`${name} (${totalTracks} ${totalTracks > 1 ? 'Songs' : 'Song'})`}</div>
-                    <div>{`By ${display_name}`}</div>
-                </div>
-                { /*language=CSS*/ }
-                <style jsx>{`
+        <div className="root">
+            <div className="top">
+                <div>{`${totalTracks} ${totalTracks > 1 ? 'Songs' : 'Song'}`}</div>
+                <a href={spotify} target="_blank"><img src="/static/Spotify_White.png"/></a>
+            </div>
+            {image &&
+            <Link href={`/playlist?id=${id}&ownerId=${ownerId}`}>
+                <a><ImageWithLoader url={image.url} style={{ width: '10em', height: '10em', overflow: 'hidden' }}/></a>
+            </Link>
+            }
+            { /*language=CSS*/ }
+            <style jsx>{`
                     .root {
-                        width: 100%;
+                        width: 10em;
                         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
                         border-bottom: .5em solid ${backGroundOrange};
                         border-radius: 6px;
-                        max-width: 600px;
-                        margin-bottom: 15px;
+                        margin: 1em;
                         overflow: hidden;
                     }
                     .top {
                         color: white;
-                        font-weight: bold;
                         display: flex;
+                        align-items: center;
                         justify-content: space-between;
-                        padding: .5em;
+                        font-weight: bold;
+                        padding: .25em .5em;
                         background-color: ${backGroundOrange};
                         text-transform: capitalize;
                         font-size: 1.2em;
                     }
+                    img {
+                        height: .75em;
+                    }
                 `}</style>
-            </a>
-        </Link>
+        </div>
     )
 }
 
@@ -53,12 +60,20 @@ const featuredPlaylists = gql`
     items {
       ... on Playlist {
         id
+        images {
+            url
+            width
+            height
+        }
         owner {
           id
           display_name
         }
         name
         totalTracks
+        external_urls {
+            spotify
+        }
       }
     }
     total
@@ -86,9 +101,11 @@ class Index extends Component {
                 <style jsx>{`
                     div {
                         display: flex;
-                        flex-direction: column;
+                        flex-wrap: wrap;
+                        justify-content: center;
                         align-items: center;
                         padding: .5em;
+                        flex: 1;
                     }
                 `}</style>
             </div>
@@ -97,18 +114,9 @@ class Index extends Component {
 
     render() {
         return (
-            <div>
-                <NextHead>
-                    <title>View Your Spotify Play History With Audio Feature Information</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
-                </NextHead>
-                <NavMenu/>
+            <Layout name="Browse Featured Playlists">
                 {this.props.data.featuredPlaylists ? this.renderSessions() : <LoadingFullScreen/>}
-                <Footer/>
-                <style jsx global>{GlobalStyles}</style>
-            </div>
+            </Layout>
         )
     }
 }

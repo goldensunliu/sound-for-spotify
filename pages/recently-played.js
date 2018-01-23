@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import NextHead from 'next/head'
 
+import Layout from '../components/Layout'
 import Button from '../components/button'
 import LoadingFullScreen from '../components/LoadingFullScreen'
 
 import Session from '../components/session'
-import GlobalStyles from '../global-styles'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
-import NavMenu, { Footer } from '../components/NavMenu'
 import splitIntoPlaySessions from '../utils/splitIntoPlaySessions'
 
 const recentlyPlayed = gql`
@@ -74,6 +72,7 @@ class Index extends Component {
                 <style jsx>{`
                     div {
                         display: flex;
+                        width: 100%;
                         flex-direction: column;
                         align-items: center;
                         padding: .5em;
@@ -85,31 +84,11 @@ class Index extends Component {
 
     render() {
         return (
-            <div>
-                <NextHead>
-                    <title>View Your Spotify Play History With Audio Feature Information</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-                    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
-                </NextHead>
-                <NavMenu/>
+            <Layout name="View Your Spotify Play History With Audio Feature Insights">
                 {this.props.data.recentlyPlayed ? this.renderSessions() : <LoadingFullScreen/>}
-                <Footer/>
-                <style jsx global>{GlobalStyles}</style>
-            </div>
+            </Layout>
         )
     }
-}
-
-const graphqlOptions = {
-  options: (props) => {
-      const collapsed = props.collapseAll
-      return {
-          variables: {
-              collapsed: collapsed
-          }
-      }
-  },
 }
 
 export default withData(graphql(recentlyPlayed)(Index))

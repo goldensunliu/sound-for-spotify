@@ -4,7 +4,6 @@ import MenuSvg from '../images/menu.svg'
 import Link from 'next/link'
 import { bubble as Menu } from 'react-burger-menu'
 
-// TODO refactor these into a HOC
 const NavMenu = ({ isOpen }) => {
     return (
         <Menu isOpen={isOpen} customBurgerIcon={<MenuSvg/>} width={ 200 } styles={MenuStyles}>
@@ -31,7 +30,6 @@ const NavMenu = ({ isOpen }) => {
     )
 }
 
-// TODO use Spotify branding on powerd by disclaimer
 export const Footer = () => {
     return (
         <div className="root">
