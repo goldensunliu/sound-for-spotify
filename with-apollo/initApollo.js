@@ -1,7 +1,6 @@
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-// TODO when https://github.com/apollographql/apollo-link/pull/364 is merged start using batch
-// import { BatchHttpLink } from "apollo-link-batch-http"
+// TODO monitor https://github.com/apollographql/apollo-link/issues/343 and the progress of removing the dependency on apollo-fetch an use the same options / API as the http-link
+import { BatchHttpLink } from "apollo-link-batch-http"
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import fetch from 'isomorphic-fetch'
 
@@ -13,24 +12,11 @@ if (!process.browser) {
 }
 
 function create ({ initialState, graphQlServerUrl, cookies }) {
-    let fetchOptions
-    if (!process.browser)
-    {
-        fetchOptions = {}
-    }
-    else
-    {
-        fetchOptions = {
-            credentials: 'include' // Additional fetch() options like `credentials` or `headers`
-        }
-    }
     return new ApolloClient({
         connectToDevTools: process.browser,
         ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-        link: new HttpLink({
-            uri: graphQlServerUrl, // Server URL (must be absolute)
-            fetchOptions,
-            headers : { Cookie: cookies }
+        link: new BatchHttpLink({
+            uri: graphQlServerUrl // Server URL (must be absolute)
         }),
         cache: new InMemoryCache().restore(initialState || {}),
     })

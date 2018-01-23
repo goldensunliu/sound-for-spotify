@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import Head from 'next/head'
+import Cookies from 'js-cookie'
+
 const dev = process.env.NODE_ENV !== 'production'
 
 import initApollo from './initApollo'
@@ -22,7 +24,7 @@ export default ComposedComponent => {
             let serverState = { apollo: {} }
             // These two variables is closely coupled to this app, in that the graph ql server is deployed on the same host
             // and the needed spotify token is set in the session, so we pass these two on init of apollo on server and client side
-            let graphQlServerUrl, cookies;
+            let graphQlServerUrl, token;
 
             // Evaluate the composed component's getInitialProps()
             let composedInitialProps = {}
@@ -31,13 +33,12 @@ export default ComposedComponent => {
             }
             if (context.req)
             {
-                cookies = context.req.headers.cookie
+                token = context.req.cookies['spotify-token']
                 let protocol
                 // use the de-factor header x-forwarded-proto behind now's load balancer
                 if (!dev && context.req.headers['x-forwarded-proto'])
                 {
                     protocol= context.req.headers['x-forwarded-proto']
-                    protocol = context.req.protocol
                 }
                 // use whatever is in the req
                 else
@@ -48,14 +49,16 @@ export default ComposedComponent => {
             }
             else
             {
-                cookies = document.cookies
                 graphQlServerUrl = `${window.origin}/graphql`
+                token = Cookies.get("spotify-token")
             }
+
+            graphQlServerUrl = `${graphQlServerUrl}?token=${token}`
 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
             if (!process.browser) {
-                const apollo = initApollo({ graphQlServerUrl, cookies })
+                const apollo = initApollo({ graphQlServerUrl })
                 // Provide the `url` prop data in case a GraphQL query uses it
                 const url = {query: context.query, pathname: context.pathname}
                 try {
@@ -85,7 +88,6 @@ export default ComposedComponent => {
             return {
                 serverState,
                 graphQlServerUrl,
-                cookies,
                 ...composedInitialProps
             }
         }
@@ -94,8 +96,7 @@ export default ComposedComponent => {
             super(props)
             this.apollo = initApollo({
                 initialState : props.serverState.apollo.data,
-                graphQlServerUrl: props.graphQlServerUrl,
-                cookies: props.cookies
+                graphQlServerUrl: props.graphQlServerUrl
             })
         }
 

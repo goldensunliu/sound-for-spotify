@@ -35,7 +35,7 @@ async function start() {
         bodyParser.json(),
         graphqlExpress(req => {
             // this is set the client side via the the implicit Spotify Auth flow
-            const token = req.cookies['spotify-token']
+            const token = req.query['token']
             const schema = makeSchema(token)
             return { schema }
         }));
