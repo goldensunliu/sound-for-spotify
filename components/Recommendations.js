@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Track from '../components/track'
-import { backGroundOrange } from '../utils/colors'
+import { backGroundBlue } from '../utils/colors'
 
 const Divider = ({name}) => {
     return (
@@ -20,7 +20,7 @@ const Divider = ({name}) => {
                     display: flex;
                     justify-content: space-between;
                     padding: .5em .25em;
-                    background-color: ${backGroundOrange};
+                    background-color: #377BA4;
                     text-transform: capitalize;
                     font-size: 1.2em;
                 }
@@ -30,7 +30,7 @@ const Divider = ({name}) => {
 }
 
 
-export default class Playlist extends Component {
+export default class Recommendations extends Component {
     state = { expanded : true }
     constructor (props) {
         super(props)
@@ -38,24 +38,24 @@ export default class Playlist extends Component {
 
     renderTracks() {
         const { tracks } = this.props
-        return tracks.map(({ track }, i) => {
-                return <Track key={i} track={track}/>
+        return tracks.map((track, i) => {
+                return <Track key={i} track={track} themeColor={backGroundBlue}/>
         })
     }
 
     render() {
-        const { name, totalTracks } = this.props
+        const { name } = this.props
         return (
             <div className="root">
                 {
-                    <Divider name={name} totalTracks={totalTracks}/>
+                    <Divider name={name}/>
                 }
                 {this.renderTracks()}
                 { /*language=CSS*/ }
                 <style jsx>{`
                         .root {
                             box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                            border-bottom: .5em solid ${backGroundOrange};
+                            border-bottom: .5em solid ${backGroundBlue};
                             border-radius: 6px;
                             width: 100%;
                             margin-bottom: 15px;

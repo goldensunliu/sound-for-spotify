@@ -13,19 +13,28 @@ const Layout = ({name, children}) =>{
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
             </NextHead>
             <NavMenu/>
-            <div className="body">
-                {children}
+            <div className="root">
+                <div className="body">
+                    {children}
+                </div>
                 <Footer/>
             </div>
             <style jsx global>{GlobalStyles}</style>
             { /*language=CSS*/ }
             <style jsx>{`
-                .body {
+                .root {
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     justify-content: space-between;
+                }
+                .body {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 1;
+                    width: 100vw;
                 }
             `}</style>
         </div>

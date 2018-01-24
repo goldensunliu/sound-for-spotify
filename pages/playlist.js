@@ -70,7 +70,7 @@ class Index extends Component {
         const { data: { playlist, loading }  } = this.props
         return (
             <div>
-                <Playlist {...playlist} />
+                <Playlist tracks={playlist.tracks.items} name={playlist.name} totalTracks={playlist.totalTracks} />
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
@@ -104,6 +104,7 @@ const graphqlOptions = {
         }
     },
     props: (props) => {
+
         return props
     }
 }

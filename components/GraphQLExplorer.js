@@ -1,9 +1,10 @@
 import GraphiQL from 'graphiql'
 import fetch from 'isomorphic-fetch'
+import Cookies from 'js-cookie'
 
 // TODO make isomorphic, should be easy
 function graphQLFetcher(graphQLParams) {
-    return fetch(window.location.origin + '/graphql', {
+    return fetch(window.location.origin + `/graphql?token=${Cookies.get("spotify-token")}`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

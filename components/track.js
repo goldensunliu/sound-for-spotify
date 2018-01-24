@@ -92,7 +92,7 @@ class ExpandedContent extends Component {
     }
 
     render() {
-        const { played_at, track : { id, artists }, data } = this.props;
+        const { played_at, track : { id, artists }, data, themeColor } = this.props;
         if (data.loading) return <Spinner/>
         const audio_features = data.audioFeatures
         const saved = data.track.saved
@@ -169,8 +169,15 @@ const ConnectedExpandedContent = compose(graphql(query, graphalOptions), graphql
 
 class Track extends Component {
     state = { expanded: false }
+    static defaultProps = {
+      themeColor: backGroundOrange
+   }
+    constructor(props) {
+        super(props)
+        this.state = { expanded : props.expanded }
+    }
     render() {
-        const { track } = this.props;
+        const { track, themeColor } = this.props;
         const { expanded } = this.state
         const { artists, album, external_urls : { spotify } } = track;
         const artistName = artists && artists[0].name
@@ -196,7 +203,7 @@ class Track extends Component {
                     .wrapper {
                         padding: .3em .2em;
                         position: relative;
-                        border-bottom: 1px solid ${Color(backGroundOrange).lighten(.1).hsl().string()};
+                        border-bottom: 1px solid ${Color(themeColor).lighten(.1).hsl().string()};
                         background: linear-gradient(45deg, #FBE9E7, #ffffff);
                         color: ${FontColor.hsl().string()};
                     }
