@@ -1,2 +1,2 @@
-export const CLIENT_ID = '0a4a82f98973453f87737e20f44f957c';
-export const scopes = 'user-read-recently-played+user-library-read+user-library-modify'
+export const CLIENT_ID = null // Set this to your Spotify app's client ID;
+export const APOLLO_ENGINE_API_KEY = null; // optionally set this if you want apollo engine in to mix

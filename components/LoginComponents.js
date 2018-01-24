@@ -1,12 +1,13 @@
-import { CLIENT_ID, scopes } from "../spotify-config";
+import { CLIENT_ID } from "../spotify-config";
 import Button from './button'
 
+const SCOPES = 'user-read-recently-played+user-library-read+user-library-modify'
 function redirectToLogin() {
     const redirectLink = window.origin + '/login'
     const state = getParameterByName('returnTo') || '/graphiql'
     // Right now we just pass the path as the state, use at your own risk, strongly recommend the following:
     // generate a random string or encode the hash of some client state (e.g., a cookie) in this state variable, you can validate the response to additionally ensure that the request and response originated in the same browser
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&scopes=${scopes}&redirect_uri=${encodeURIComponent(redirectLink)}&state=${encodeURIComponent(state)}&response_type=token`
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&scopes=${SCOPES}&redirect_uri=${encodeURIComponent(redirectLink)}&state=${encodeURIComponent(state)}&response_type=token`
     window.location = authUrl;
 }
 
