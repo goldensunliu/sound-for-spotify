@@ -9,7 +9,8 @@ const NavMenu = ({ isOpen }) => {
         <Menu isOpen={isOpen} customBurgerIcon={<MenuSvg/>} width={ 200 } styles={MenuStyles}>
             <div className="menu-item"><Link href="/graphiql"><a>Spotify GraphQL Explorer</a></Link></div>
             <div className="menu-item"><Link href="/recently-played"><a>Recently Played Tracks</a></Link></div>
-            <div className="menu-item"><Link href="/featured-playlists"><a>Browser Featured Playlists</a></Link></div>
+            <div className="menu-item"><Link href="/featured-playlists"><a>Browse Featured Playlists</a></Link></div>
+            <div className="menu-item"><Link href="/categories"><a>Browse Categories</a></Link></div>
            { /*language=CSS*/ }
             <style jsx>{`
                 .menu-item, a {

@@ -19,37 +19,43 @@ const Summary = (props) => {
                             image={image} href={`/playlist?id=${id}&ownerId=${ownerId}`}/>
 }
 
-const featuredPlaylists = gql`
-{
-  featuredPlaylists(limit: 50) {
-    items {
-      ... on Playlist {
-        id
-        images {
+const playlistsQuery = gql`
+query category($id: String!) {
+  category(id: $id) {
+    id
+    name
+    playlists(limit: 50) {
+      items {
+        ... on Playlist {
+          id
+          images {
             url
             width
             height
-        }
-        owner {
-          id
-          display_name
-        }
-        name
-        totalTracks
-        external_urls {
+          }
+          owner {
+            id
+            display_name
+          }
+          name
+          totalTracks
+          external_urls {
             spotify
+          }
         }
       }
     }
-    total
   }
 }
+
 `
 
 class Index extends Component {
     state = { expanded: true }
     static async getInitialProps ({req, res, query}) {
+        const { id } = query
         checkLogin({req, res})
+        return { id }
     }
 
     constructor (props) {
@@ -57,11 +63,11 @@ class Index extends Component {
     }
 
 
-    renderSessions () {
-        const { data: { featuredPlaylists, loading }  } = this.props
+    renderPlaylists () {
+        const { data: { category }  } = this.props
         return (
             <div>
-                {featuredPlaylists.items.map((playlist, i) => <Summary key={i} {...playlist} />)}
+                {category.playlists.items.map((playlist, i) => <Summary key={i} {...playlist} />)}
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
@@ -78,12 +84,22 @@ class Index extends Component {
     }
 
     render() {
+        const { data: { category }  } = this.props
         return (
-            <Layout name="Browse Featured Playlists">
-                {this.props.data.featuredPlaylists ? this.renderSessions() : <LoadingFullScreen/>}
+            <Layout name={category && category.name || "Category"}>
+                {category ? this.renderPlaylists() : <LoadingFullScreen/>}
             </Layout>
         )
     }
 }
 
-export default withData(graphql(featuredPlaylists)(Index))
+const graphqlOptions = {
+    options: (props) => {
+        const { id } = props
+        return {
+            variables: { id }
+        }
+    }
+}
+
+export default withData(graphql(playlistsQuery, graphqlOptions)(Index))

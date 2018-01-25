@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import {formatRelative} from 'date-fns'
 import Color from 'color'
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
-import { compose } from 'react-apollo'
+import { compose, graphql } from 'react-apollo'
+import Link from 'next/link'
+import Router from 'next/router'
 
 import Button from '../components/button'
 import Grow from "./transitions/grow"
-import { backGroundOrange, backGroundGrey } from '../utils/colors'
+import { backGroundOrange, backGroundGrey, backGroundBlue } from '../utils/colors'
 import ImageWithLoader from '../components/ImageWithLoader'
 import Artist from '../components/Artist'
 import AudioFeatures from '../components/AudioFeatures'
@@ -81,7 +82,6 @@ const graphalOptions = {
 
 
 class ExpandedContent extends Component {
-    state = {}
 
     // TODO must update cache after mutate
     saveTrack = async () => {
@@ -89,6 +89,12 @@ class ExpandedContent extends Component {
         this.props.mutate({
             variables: { trackId: id }
         })
+    }
+
+    constructor(props) {
+        super(props)
+        const showDetailsLink = Router.route !== '/track'
+        this.state = { showDetailsLink }
     }
 
     render() {
@@ -99,7 +105,7 @@ class ExpandedContent extends Component {
         return (
             <div className="root">
                 <div className="divider"/>
-                <div className="played-at-row">
+                <div className="top-row">
                     { played_at ? (
                         <div className="played-at-info">
                             <HeadSet style={{height: '1.4em', width: '1.4em', marginRight: '.6em' }}/>
@@ -107,11 +113,14 @@ class ExpandedContent extends Component {
                         </div>) :
                         <div className="played-at-info"/>
                     }
-                    {
-                        (saved || this.state.saved || this.state.saving) ?
-                            <div className="saved">{this.state.saving ? 'Saving...' : "Saved"}</div> :
-                            <Button onClick={this.saveTrack} size="small">Save</Button>
-                    }
+                    <div className="top-row-right-side">
+                        { this.state.showDetailsLink && <Link href={`/track?id=${id}`}><a className="details-link">Details</a></Link> }
+                        {
+                            (saved || this.state.saved || this.state.saving) ?
+                                <div className="saved">{this.state.saving ? 'Saving...' : "Saved"}</div> :
+                                <Button onClick={this.saveTrack} size="small">Save</Button>
+                        }
+                    </div>
                 </div>
                 {audio_features ? <AudioFeatures trackId={id}/>: null}
                 <Artists artists={artists}/>
@@ -133,13 +142,13 @@ class ExpandedContent extends Component {
                         width: 90%;
                         margin: auto;
                     }
-                    .played-at-row {
+                    .top-row {
                         font-size: .8em;
                         text-transform: capitalize;
                         margin: 0.4em;
                         justify-content: space-between;
                     }
-                    .played-at-info, .played-at-row {
+                    .played-at-info, .top-row, .top-row-right-side {
                         display: flex;
                         align-items: center;
                         font-size: 1em;
@@ -152,12 +161,18 @@ class ExpandedContent extends Component {
                     .music-stuff .pill {
                         background-color: ${backGroundGrey};
                     }
-                    .saved {
+
+                    .saved, .details-link {
                         color: ${backGroundOrange};
                         padding: .25em .5em;
                         font-size: 1.2em;
                         border: 1px solid;
                         border-radius: .25em;
+                    }
+                    .details-link {
+                        color: ${backGroundBlue};
+                        margin-right: .5em;
+                        border-width: .1em;
                     }
                 `}</style>
             </div>

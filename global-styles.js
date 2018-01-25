@@ -1,8 +1,8 @@
 import css from 'styled-jsx/css'
-import { backGroundOrange, backGroundGrey } from './utils/colors'
+import { backGroundOrange, backGroundGrey, backGroundBlue } from './utils/colors'
 import Color from 'color'
 
-const backGroundMenuColor = backGroundOrange;
+const backGroundMenuColor = backGroundBlue;
 export const MenuStyles = {
     bmBurgerButton: {
         position: 'fixed',
@@ -46,7 +46,7 @@ body {
 }
 
 .bm-burger-button * {
-    fill: ${backGroundOrange}
+    fill: ${backGroundMenuColor}
 }
 @media (min-width: 600px) {
     body { font-size: 15px; }

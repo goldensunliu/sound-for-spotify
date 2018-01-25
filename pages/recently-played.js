@@ -64,12 +64,16 @@ class Index extends Component {
         })
         return (
             <div>
-                <div>
+                <div className="collapse-toggle">
                     <Button onClick={this.toggleExpand}>{ collapseAll ? 'Expand All' : 'Collapse All'}</Button>
                 </div>
                 {sessions.map((session, i) => <Session key={i} session={session} collapse={collapseAll}/>)}
                 { /*language=CSS*/ }
                 <style jsx>{`
+                    .collapse-toggle {
+                        margin-top: .5em;
+                        margin-bottom: .5em;
+                    }
                     div {
                         display: flex;
                         width: 100%;

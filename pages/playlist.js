@@ -67,7 +67,7 @@ class Index extends Component {
     }
 
     renderPlaylist () {
-        const { data: { playlist, loading }  } = this.props
+        const { data: { playlist }  } = this.props
         return (
             <div>
                 <Playlist tracks={playlist.tracks.items} name={playlist.name} totalTracks={playlist.totalTracks} />
