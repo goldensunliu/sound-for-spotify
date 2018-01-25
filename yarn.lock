@@ -2741,9 +2741,9 @@ graphql-request@^1.4.0:
   dependencies:
     cross-fetch "1.1.1"
 
-graphql-spotify@^0.4.3:
-  version "0.4.141"
-  resolved "https://registry.yarnpkg.com/graphql-spotify/-/graphql-spotify-0.4.141.tgz#ef4789344c35d3e6b250c7a4620dd0dc3b3cd5fe"
+graphql-spotify@^0.4.31:
+  version "0.4.31"
+  resolved "https://registry.yarnpkg.com/graphql-spotify/-/graphql-spotify-0.4.31.tgz#4dd30fb1720e8a0bbe6601d9051c54442c33c105"
   dependencies:
     dataloader "^1.3.0"
     graphql-tools "^2.18.0"
