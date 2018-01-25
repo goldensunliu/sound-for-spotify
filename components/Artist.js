@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo'
 
 import ImageWithLoader from './ImageWithLoader'
 import Spinner from '../components/spinner'
+import { backGroundOrange } from "../utils/colors"
 
 const artistQuery = gql`
 query artist($id: String!) {
@@ -33,10 +34,31 @@ const graphalOptions = {
     },
 }
 
-const ArtistAvatar = ({images}) => {
+const ArtistAvatar = ({images, name}) => {
     if (images && images.length) {
         const image = images[0]
         return <ImageWithLoader url={image.url} style={{ width: '4em', height: '4em', borderRadius: '50%', overflow: 'hidden' }}/>
+    } else {
+        const initials = name.split(" ").map(word => word[0]).join("")
+        return (
+            <div className="initials">
+                {initials}
+                {/*language=CSS*/}
+                <style jsx>{`
+                    .initials {
+                        border: 2px solid ${backGroundOrange};
+                        color: ${backGroundOrange};
+                        font-weight: bold;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 4em;
+                        height: 4em;
+                    }
+                `}</style>
+            </div>
+        )
     }
 }
 
@@ -64,8 +86,8 @@ const Artist = ({data}) => {
     const {name, genres, images, external_urls: { spotify }} = data.artist
     return (
         <div className="artist">
-            <a href={spotify} target="_blank">
-                <ArtistAvatar images={images}/></a>
+            <a href={spotify} target="_blank" className="artist-avatar">
+                <ArtistAvatar images={images} name={name}/></a>
             <div>
                 <div className="name">{name}</div>
                 <GenreRow genres={genres}/>
@@ -75,6 +97,9 @@ const Artist = ({data}) => {
                 .artist {
                     display: flex;
                     align-items: center;
+                }
+                .artist-avatar {
+                    margin-right: .5em;
                 }
                 .artist:not(:last-child) {
                     margin-bottom: .4em;
