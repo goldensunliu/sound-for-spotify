@@ -31,8 +31,6 @@ const Layout = ({name, children}) =>{
                 }
                 .body {
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
                     flex: 1;
                     width: 100vw;
                 }

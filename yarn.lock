@@ -2742,8 +2742,8 @@ graphql-request@^1.4.0:
     cross-fetch "1.1.1"
 
 graphql-spotify@^0.4.31:
-  version "0.4.31"
-  resolved "https://registry.yarnpkg.com/graphql-spotify/-/graphql-spotify-0.4.31.tgz#4dd30fb1720e8a0bbe6601d9051c54442c33c105"
+  version "0.4.141"
+  resolved "https://registry.yarnpkg.com/graphql-spotify/-/graphql-spotify-0.4.141.tgz#ef4789344c35d3e6b250c7a4620dd0dc3b3cd5fe"
   dependencies:
     dataloader "^1.3.0"
     graphql-tools "^2.18.0"
@@ -4425,6 +4425,12 @@ querystring@0.2.0, querystring@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
+raf@^3.1.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.0.tgz#a28876881b4bc2ca9117d4138163ddb80f781575"
+  dependencies:
+    performance-now "^2.1.0"
+
 randomatic@^1.1.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.7.tgz#c7abe9cc8b87c0baa876b19fde83fd464797e38c"
@@ -4488,6 +4494,12 @@ react-burger-menu@^2.2.3:
     prop-types "^15.5.8"
     snapsvg-cjs "0.0.6"
 
+react-collapse@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-4.0.3.tgz#b96de959ed0092a43534630b599a4753dd76d543"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-deep-force-update@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.1.1.tgz#8ea4263cd6455a050b37445b3f08fd839d86e909"
@@ -4516,6 +4528,14 @@ react-image@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-image/-/react-image-1.3.1.tgz#32af60126ea92f4860df46697eea42c1661cef87"
   dependencies:
     prop-types "15.6.0"
+
+react-motion@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.5.2.tgz#0dd3a69e411316567927917c6626551ba0607316"
+  dependencies:
+    performance-now "^0.2.0"
+    prop-types "^15.5.8"
+    raf "^3.1.0"
 
 react-popover@^0.5.4:
   version "0.5.4"
@@ -5009,8 +5029,8 @@ source-map-support@0.4.18, source-map-support@^0.4.15:
     source-map "^0.5.6"
 
 source-map-support@^0.5.1:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.2.tgz#1a6297fd5b2e762b39688c7fc91233b60984f0a5"
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.3.tgz#2b3d5fff298cfa4d1afd7d4352d569e9a0158e76"
   dependencies:
     source-map "^0.6.0"
 

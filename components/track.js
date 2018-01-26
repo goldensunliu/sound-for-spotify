@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 
 import Button from '../components/button'
-import Grow from "./transitions/grow"
+import { Collapse } from 'react-collapse'
 import { backGroundOrange, backGroundGrey, backGroundBlue } from '../utils/colors'
 import ImageWithLoader from '../components/ImageWithLoader'
 import Artist from '../components/Artist'
@@ -210,9 +210,9 @@ class Track extends Component {
                     </div>
                     <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>
                 </div>
-                <Grow in={expanded} maxHeight={500}>
-                    <ConnectedExpandedContent {...this.props}/>
-                </Grow>
+                <Collapse isOpened={expanded}>
+                    { expanded && <ConnectedExpandedContent {...this.props}/>}
+                </Collapse>
                 { /*language=CSS*/ }
                 <style jsx>{`
                     .wrapper {

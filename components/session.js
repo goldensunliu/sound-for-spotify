@@ -3,7 +3,7 @@ import { formatRelative } from 'date-fns'
 
 import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
-import Fade from '../components/transitions/fade'
+import { Collapse } from 'react-collapse'
 
 const SessionDivider = ({playedAt, now, length, toggleExpand }) => {
     return (
@@ -60,6 +60,8 @@ export default class Session extends Component {
         )
     }
 
+    toggleExpand = () => {this.setState({ expanded: !this.state.expanded})}
+
     render() {
         const { session } = this.props
         const { expanded } = this.state
@@ -68,11 +70,11 @@ export default class Session extends Component {
         return (
             <div className={`root${!expanded ? '' : ' collapsed'}`}>
                 {
-                    <SessionDivider toggleExpand={() => {this.setState({ expanded: !this.state.expanded})}} playedAt={new Date(played_at)} now={now} length={session.length}/>
+                    <SessionDivider toggleExpand={this.toggleExpand} playedAt={new Date(played_at)} now={now} length={session.length}/>
                 }
-                <Fade in={expanded}>
+                <Collapse isOpened={expanded}>
                     {expanded && this.renderTracks()}
-                </Fade>
+                </Collapse>
                 { /*language=CSS*/ }
                 <style jsx>{`
                         .root {
