@@ -1,5 +1,6 @@
 import { CLIENT_ID } from "../spotify-config";
 import Button from './button'
+import Typist from 'react-typist'
 
 const SCOPES = 'user-read-recently-played+user-library-read+user-library-modify'
 function redirectToLogin() {
@@ -42,7 +43,9 @@ const LoginCta = (
 export const PendingState = () => {
     return (
         <div className="root">
-            <div className="copy">Login To Explore Spotify API the GraphQL Way!</div>
+            <Typist className="copy">
+                Login To Explore Your Spotify Data Like Never Before!
+            </Typist>
             {LoginCta}
             { /*language=CSS*/ }
             <style jsx>{`

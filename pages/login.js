@@ -37,7 +37,7 @@ export default class Index extends Component {
 
     render () {
         return (
-            <Layout name="Login To Explore Spotify API the GraphQL Way!" hideMenu>
+            <Layout name="Login To Explore Your Spotify Data!" hideMenu>
                 <PendingState needLogin/>
             </Layout>
         )
