@@ -46,7 +46,7 @@ class Index extends Component {
                     categories.items.map((category, i) => {
                         const { name, icons, id } = category
                         return (
-                            <LinkableSummary id={i} name={name} image={icons && icons[0]} href={`/category?id=${id}`}/>
+                            <LinkableSummary key={i} name={name} image={icons && icons[0]} href={`/category?id=${id}`}/>
                         )
                     })
                 }

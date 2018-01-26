@@ -34,11 +34,12 @@ const SessionDivider = ({playedAt, now, length, toggleExpand }) => {
 }
 
 // Sessions are processed on the UI layer from the recently played graphql query
-// TODO make new query for getting a list of sessions
+// TODO split session in the props option of apollo layer
 export default class Session extends Component {
     state = {
         expanded : true
     }
+
     constructor (props) {
         super(props)
         this.state.expanded = !props.collapse
@@ -72,7 +73,7 @@ export default class Session extends Component {
                 {
                     <SessionDivider toggleExpand={this.toggleExpand} playedAt={new Date(played_at)} now={now} length={session.length}/>
                 }
-                <Collapse isOpened={expanded}>
+                <Collapse isOpened={expanded} hasNestedCollapse>
                     {expanded && this.renderTracks()}
                 </Collapse>
                 { /*language=CSS*/ }

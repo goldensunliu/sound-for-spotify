@@ -3,14 +3,18 @@ import { MenuStyles } from '../global-styles'
 import MenuSvg from '../images/menu.svg'
 import Link from 'next/link'
 import { bubble as Menu } from 'react-burger-menu'
+import Cookies from 'js-cookie'
+import Router from 'next/router'
 
+function logOut() {
+    Cookies.remove('spotify-token');
+    Router.push(Router.asPath)
+}
 const NavMenu = ({ isOpen }) => {
     return (
         <Menu isOpen={isOpen} customBurgerIcon={<MenuSvg/>} width={ 200 } styles={MenuStyles}>
-            <div className="menu-item"><Link href="/graphiql"><a>Spotify GraphQL Explorer</a></Link></div>
-            <div className="menu-item"><Link href="/recently-played"><a>Recently Played Tracks</a></Link></div>
-            <div className="menu-item"><Link href="/featured-playlists"><a>Browse Featured Playlists</a></Link></div>
-            <div className="menu-item"><Link href="/categories"><a>Browse Categories</a></Link></div>
+            <div className="menu-item"><Link href="/dashboard"><a>Dashboard</a></Link></div>
+            <div className="menu-item"><div onClick={logOut}>Log Out</div></div>
            { /*language=CSS*/ }
             <style jsx>{`
                 .menu-item, a {

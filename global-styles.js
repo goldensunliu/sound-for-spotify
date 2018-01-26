@@ -65,6 +65,11 @@ a {
     text-transform: capitalize;
     padding: 5px;
 }
+.header {
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1.5em;
+}
 .truncate {
     white-space: nowrap;
     overflow: hidden;

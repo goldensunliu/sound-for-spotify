@@ -3,7 +3,7 @@ import NextHead from 'next/head'
 import NavMenu, { Footer } from './NavMenu'
 import GlobalStyles from '../global-styles'
 
-const Layout = ({name, children}) =>{
+const Layout = ({name, children, hideMenu}) =>{
     return(
         <div>
             <NextHead>
@@ -12,7 +12,7 @@ const Layout = ({name, children}) =>{
                 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
             </NextHead>
-            <NavMenu/>
+            { !hideMenu && <NavMenu/> }
             <div className="root">
                 <div className="body">
                     {children}

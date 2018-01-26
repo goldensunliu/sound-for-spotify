@@ -70,14 +70,13 @@ class Index extends Component {
         const { data: { playlist }  } = this.props
         return (
             <div>
-                <Playlist tracks={playlist.tracks.items} name={playlist.name} totalTracks={playlist.totalTracks} />
+                <Playlist tracks={playlist.tracks.items.map(({track}) => track)} name={playlist.name} totalTracks={playlist.totalTracks} />
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        padding: .5em;
                         width: 100%;
                     }
                 `}</style>

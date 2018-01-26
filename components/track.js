@@ -83,7 +83,6 @@ const graphalOptions = {
 
 class ExpandedContent extends Component {
 
-    // TODO must update cache after mutate
     saveTrack = async () => {
         const { id } = this.props.track
         this.props.mutate({
@@ -211,7 +210,7 @@ class Track extends Component {
                     <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>
                 </div>
                 <Collapse isOpened={expanded}>
-                    { expanded && <ConnectedExpandedContent {...this.props}/>}
+                    { expanded ? <ConnectedExpandedContent {...this.props}/> : <div/>}
                 </Collapse>
                 { /*language=CSS*/ }
                 <style jsx>{`

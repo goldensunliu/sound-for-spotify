@@ -45,7 +45,7 @@
     "babel-loader": "^7.1.2",
     "color": "^2.0.1",
     "date-fns": "^2.0.0-alpha.7",
-    "graphql-spotify": "^0.4.31",
+    "graphql-spotify": "^0.4.35",
     "graphql-tag": "^2.6.1",
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
@@ -57,6 +57,7 @@
     "react-motion": "^0.5.2",
     "react-popover": "^0.5.4",
     "react-typist": "^2.0.4",
+    "victory": "^0.24.5",
     "webpack-node-externals": "^1.6.0"
   }
 }

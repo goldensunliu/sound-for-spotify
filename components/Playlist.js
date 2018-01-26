@@ -2,24 +2,30 @@ import React, { Component } from 'react';
 
 import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
+import { Collapse } from 'react-collapse'
 
-const Divider = ({name}) => {
+
+const Divider = ({name, onClick, expanded}) => {
     return (
-        <div className="root">
+        <div className="root" onClick={onClick}>
             <div className="top">
-                <div>{name}</div>
+                <div className="name">{name}</div>
+                { onClick && <div>{expanded ? "Collapse" : "Expand"}</div>}
             </div>
             { /*language=CSS*/ }
             <style jsx>{`
                 .root {
                     width: 100%;
                 }
+                .name {
+                    font-size: 1.2em;
+                }
                 .top {
                     color: white;
                     font-weight: bold;
                     display: flex;
                     justify-content: space-between;
-                    padding: .5em .25em;
+                    padding: .5em .5em;
                     background-color: ${backGroundOrange};
                     text-transform: capitalize;
                     font-size: 1.2em;
@@ -32,25 +38,35 @@ const Divider = ({name}) => {
 
 export default class Playlist extends Component {
     state = { expanded : true }
+
     constructor (props) {
         super(props)
+        this.state.expanded = !props.isCollapsed
+    }
+
+    toggleExpand = () => {
+        if (!this.props.collapsable) return
+        this.setState({ expanded: !this.state.expanded})
     }
 
     renderTracks() {
         const { tracks } = this.props
-        return tracks.map(({ track }, i) => {
+        return tracks.map((track, i) => {
                 return <Track key={i} track={track}/>
         })
     }
 
     render() {
-        const { name, totalTracks } = this.props
+        const { name, totalTracks, tracks } = this.props
+        const { expanded } = this.state
         return (
             <div className="root">
                 {
-                    <Divider name={name} totalTracks={totalTracks}/>
+                    <Divider name={name} onClick={this.props.collapsable && this.toggleExpand} expanded={expanded}/>
                 }
-                {this.renderTracks()}
+                <Collapse isOpened={expanded} hasNestedCollapse>
+                    {this.renderTracks()}
+                </Collapse>
                 { /*language=CSS*/ }
                 <style jsx>{`
                         .root {
