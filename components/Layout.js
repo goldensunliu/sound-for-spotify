@@ -2,6 +2,15 @@ import React from 'react'
 import NextHead from 'next/head'
 import NavMenu, { Footer } from './NavMenu'
 import GlobalStyles from '../global-styles'
+import Router from 'next/router'
+
+Router.onRouteChangeStart = () => {
+    document.body.classList.add('loading')
+}
+
+Router.onRouteChangeComplete = url => {
+    document.body.classList.remove('loading')
+}
 
 const Layout = ({name, children, hideMenu}) =>{
     return(

@@ -66,7 +66,7 @@ a {
     padding: 5px;
 }
 .header {
-    font-size: 1.5em;
+    font-size: 1.8em;
     font-weight: bold;
     line-height: 1.5em;
 }
@@ -103,6 +103,14 @@ body {
 
 .Popover-white .Popover-body {
     background: white;
+}
+
+body {
+  opacity: 1;
+  transition: filter 1s ease-in-out;
+}
+body.loading {
+    filter: blur(20px);
 }
 `;
 

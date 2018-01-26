@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { bubble as Menu } from 'react-burger-menu'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
+import { backGroundGrey } from "../utils/colors";
 
 function logOut() {
     Cookies.remove('spotify-token');
@@ -56,9 +57,11 @@ export const Footer = () => {
                     padding: .5em 1em 1em;
                     flex-wrap: wrap;
                     font-size: .9em;
+                    width: 100vw;
                 }
                 .menu-item {
                     min-width: 10em;
+                    color: ${backGroundGrey};
                 }
             `}</style>
         </div>
