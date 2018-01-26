@@ -54,7 +54,7 @@ export const Footer = () => {
                     display: flex;
                     align-items: center;
                     justify-content: space-evenly;
-                    padding: .5em 1em 1em;
+                    margin: .5em 1em 1em;
                     flex-wrap: wrap;
                     font-size: .9em;
                     width: 100vw;

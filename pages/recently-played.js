@@ -79,7 +79,6 @@ class Index extends Component {
                         width: 100%;
                         flex-direction: column;
                         align-items: center;
-                        padding: .25em;
                     }
                 `}</style>
             </div>
