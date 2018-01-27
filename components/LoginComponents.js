@@ -4,7 +4,7 @@ import Typist from 'react-typist'
 
 const SCOPES = 'user-read-recently-played+user-library-read+user-library-modify'
 function redirectToLogin() {
-    const redirectLink = window.origin + '/login'
+    const redirectLink = `${window.location.protocol}//${window.location.host}/login`
     const state = getParameterByName('returnTo') || '/graphiql'
     // Right now we just pass the path as the state, use at your own risk, strongly recommend the following:
     // generate a random string or encode the hash of some client state (e.g., a cookie) in this state variable, you can validate the response to additionally ensure that the request and response originated in the same browser
