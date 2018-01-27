@@ -8,6 +8,7 @@ import LoadingFullScreen from '../components/LoadingFullScreen'
 
 import Session from '../components/session'
 import withData from '../with-apollo/withData'
+import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
 import splitIntoPlaySessions from '../utils/splitIntoPlaySessions'
 
@@ -38,7 +39,6 @@ const recentlyPlayed = gql`
 	}
 }
 `
-
 class Index extends Component {
     state = { collapseAll: false }
     static async getInitialProps ({req, res, query}) {
@@ -54,6 +54,7 @@ class Index extends Component {
 
     toggleExpand = () => {
         this.setState({ collapseAll: !this.state.collapseAll })
+         process.browser.heheheheh(1)
     }
 
     renderSessions () {
@@ -94,4 +95,4 @@ class Index extends Component {
     }
 }
 
-export default withData(graphql(recentlyPlayed)(Index))
+export default withSentry(withData(graphql(recentlyPlayed)(Index)))

@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import Layout from '../components/Layout'
 import { backGroundOrange } from "../utils/colors";
+import withSentry from '../raven'
 
 class Index extends Component {
     constructor (props) {
@@ -56,4 +57,4 @@ class Index extends Component {
     }
 }
 
-export default Index
+export default withSentry(Index)

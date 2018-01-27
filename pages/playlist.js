@@ -6,6 +6,7 @@ import Playlist from '../components/Playlist'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
 
+import withSentry from '../raven'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
 import Layout from '../components/Layout'
@@ -108,4 +109,4 @@ const graphqlOptions = {
     }
 }
 
-export default withData(graphql(playlistQuery, graphqlOptions)(Index))
+export default withSentry(withData(graphql(playlistQuery, graphqlOptions)(Index)))

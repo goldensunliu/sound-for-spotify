@@ -3,11 +3,10 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import Track from '../components/track'
-import Button from '../components/button'
 import { backGroundOrange } from '../utils/colors'
-import Fade from '../components/transitions/fade'
 import LoadingFullScreen from '../components/LoadingFullScreen'
 import checkLogin from '../utils/checkLogin'
+import withSentry from '../raven'
 import withData from '../with-apollo/withData'
 import Layout from '../components/Layout'
 import Recommendations from '../components/Recommendations'
@@ -103,4 +102,4 @@ class Index extends Component {
     }
 }
 
-export default withData(graphql(trackQuery, graphqlOptions)(Index))
+export default withSentry(withData(graphql(trackQuery, graphqlOptions)(Index)))

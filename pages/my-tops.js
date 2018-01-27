@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel } from 'victory'
+import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
 import {Collapse} from 'react-collapse'
@@ -9,6 +9,7 @@ import AudioFeatureIcon from '../components/AudioFeatureIcon'
 import Playlist from '../components/Playlist'
 
 import withData from '../with-apollo/withData'
+import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
 import round from '../utils/round'
 import Layout from '../components/Layout'
@@ -363,4 +364,4 @@ const graphqlOptions = {
     }
 }
 
-export default withData(graphql(topTypesQuery, graphqlOptions)(Index))
+export default withSentry(withData(graphql(topTypesQuery, graphqlOptions)(Index)))

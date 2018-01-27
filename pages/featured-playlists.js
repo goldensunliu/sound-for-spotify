@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import Link from 'next/link'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
-import ImageWithLoader from '../components/ImageWithLoader'
 import Layout from '../components/Layout'
-import { backGroundOrange } from '../utils/colors'
 import LinkableSummary from '../components/LinkableSummary'
 
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
+import withSentry from '../raven'
 
 const Summary = (props) => {
     const { totalTracks, id, images, owner : { id : ownerId }, external_urls : { spotify }} = props
@@ -86,4 +84,4 @@ class Index extends Component {
     }
 }
 
-export default withData(graphql(featuredPlaylists)(Index))
+export default withSentry(withData(graphql(featuredPlaylists)(Index)))

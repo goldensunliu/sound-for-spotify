@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 
 import Layout from '../components/Layout'
 import { PendingState, getParamsFromHash } from '../components/LoginComponents'
+import withSentry from '../raven'
 
 function tryGettingTokenFromImplicit() {
     let tokenGotTime, token;
@@ -21,7 +22,7 @@ function tryGettingTokenFromImplicit() {
     }
 }
 
-export default class Index extends Component {
+class Index extends Component {
     state = {}
     static async getInitialProps ({req, query}) {
         return {}
@@ -43,3 +44,5 @@ export default class Index extends Component {
         )
     }
 }
+
+export default withSentry(Index)

@@ -7,6 +7,7 @@ import LinkableSummary from '../components/LinkableSummary'
 import Layout from '../components/Layout'
 
 import withData from '../with-apollo/withData'
+import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
 
 const featuredPlaylists = gql`
@@ -73,4 +74,4 @@ class Index extends Component {
     }
 }
 
-export default withData(graphql(featuredPlaylists)(Index))
+export default withSentry(withData(graphql(featuredPlaylists)(Index)))

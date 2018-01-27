@@ -8,6 +8,7 @@ import LinkableSummary from '../components/LinkableSummary'
 
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
+import withSentry from '../raven'
 
 const Summary = (props) => {
     const { totalTracks, id, images, owner : { id : ownerId }, external_urls : { spotify }} = props
@@ -99,4 +100,4 @@ const graphqlOptions = {
     }
 }
 
-export default withData(graphql(playlistsQuery, graphqlOptions)(Index))
+export default withSentry(withData(graphql(playlistsQuery, graphqlOptions)(Index)))
