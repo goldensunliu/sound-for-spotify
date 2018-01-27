@@ -5,7 +5,7 @@ import Typist from 'react-typist'
 const SCOPES = 'user-read-recently-played+user-library-read+user-library-modify'
 function redirectToLogin() {
     const redirectLink = `${window.location.protocol}//${window.location.host}/login`
-    const state = getParameterByName('returnTo') || '/graphiql'
+    const state = getParameterByName('returnTo') || '/'
     // Right now we just pass the path as the state, use at your own risk, strongly recommend the following:
     // generate a random string or encode the hash of some client state (e.g., a cookie) in this state variable, you can validate the response to additionally ensure that the request and response originated in the same browser
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&scopes=${SCOPES}&redirect_uri=${encodeURIComponent(redirectLink)}&state=${encodeURIComponent(state)}&response_type=token`
@@ -40,12 +40,15 @@ const LoginCta = (
     </Button>
 )
 
-export const PendingState = () => {
+export const PendingState = ({ loggingIn }) => {
     return (
         <div className="root">
-            <Typist className="copy">
+            {!loggingIn && <Typist className="copy">
                 Login To Explore Your Spotify Data Like Never Before!
-            </Typist>
+            </Typist>}
+            {loggingIn && <Typist className="copy">
+                Logging In.........
+            </Typist>}
             {LoginCta}
             { /*language=CSS*/ }
             <style jsx>{`

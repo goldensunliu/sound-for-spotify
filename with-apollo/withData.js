@@ -49,7 +49,7 @@ export default ComposedComponent => {
             }
             else
             {
-                graphQlServerUrl = `${window.origin}/graphql`
+                graphQlServerUrl = `${window.location.protocol}//${window.location.host}/graphql`
                 token = Cookies.get("spotify-token")
             }
 
