@@ -5,9 +5,9 @@ import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 import Link from 'next/link'
 import Router from 'next/router'
+import { Collapse } from 'react-collapse'
 
 import Button from '../components/button'
-import { Collapse } from 'react-collapse'
 import { backGroundOrange, backGroundGrey, backGroundBlue } from '../utils/colors'
 import ImageWithLoader from '../components/ImageWithLoader'
 import Artist from '../components/Artist'
@@ -61,9 +61,17 @@ query audioFeatures($id: String!) {
   }
 }
 `
+const removeTrackMutation = gql`
+mutation ($trackId: String!) {
+    removeTracks(trackIds: [$trackId]) {
+      id
+      saved
+    }
+}
+`
 const saveTrackMutation = gql`
 mutation ($trackId: String!) {
-    saveTrack(trackId: $trackId) {
+    saveTracks(trackIds: [$trackId]) {
       id
       saved
     }
@@ -85,7 +93,14 @@ class ExpandedContent extends Component {
 
     saveTrack = async () => {
         const { id } = this.props.track
-        this.props.mutate({
+        this.props.saveTrack({
+            variables: { trackId: id }
+        })
+    }
+
+    removeTrack = async () => {
+        const { id } = this.props.track
+        this.props.removeTrack({
             variables: { trackId: id }
         })
     }
@@ -115,8 +130,8 @@ class ExpandedContent extends Component {
                     <div className="top-row-right-side">
                         { this.state.showDetailsLink && <Link href={`/track?id=${id}`}><a className="details-link">Details</a></Link> }
                         {
-                            (saved || this.state.saved || this.state.saving) ?
-                                <div className="saved">{this.state.saving ? 'Saving...' : "Saved"}</div> :
+                            saved ?
+                                <Button color="blue" onClick={this.removeTrack} size="small">Remove</Button> :
                                 <Button onClick={this.saveTrack} size="small">Save</Button>
                         }
                     </div>
@@ -179,7 +194,11 @@ class ExpandedContent extends Component {
     }
 }
 
-const ConnectedExpandedContent = compose(graphql(query, graphalOptions), graphql(saveTrackMutation))(ExpandedContent)
+const ConnectedExpandedContent = compose(
+    graphql(query, graphalOptions),
+    graphql(saveTrackMutation, { name: 'saveTrack' }),
+    graphql(removeTrackMutation, { name: 'removeTrack' })
+)(ExpandedContent)
 
 class Track extends Component {
     state = { expanded: false }

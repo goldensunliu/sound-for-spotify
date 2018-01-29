@@ -11,6 +11,13 @@ if (!process.browser) {
     global.fetch = fetch
 }
 
+// TODO implement special dataId for Playlist, otherwise default to id
+const dataIdFromObject = object => {
+    switch (object.__typename) {
+
+    }
+}
+
 function create ({ initialState, graphQlServerUrl, cookies }) {
     return new ApolloClient({
         connectToDevTools: process.browser,
@@ -18,6 +25,7 @@ function create ({ initialState, graphQlServerUrl, cookies }) {
         link: new BatchHttpLink({
             uri: graphQlServerUrl // Server URL (must be absolute)
         }),
+        // dataIdFromObject
         cache: new InMemoryCache().restore(initialState || {}),
     })
 }

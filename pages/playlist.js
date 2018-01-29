@@ -1,25 +1,49 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import Playlist from '../components/Playlist'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
-
+import Button from '../components/button'
 import withSentry from '../raven'
 import withData from '../with-apollo/withData'
 import checkLogin from '../utils/checkLogin'
 import Layout from '../components/Layout'
+import ImageWithLoader from '../components/ImageWithLoader'
+
+const followPlaylistMutation = gql`
+mutation ($ownerId: String!, $playlistId: String!, $isPublic: Boolean = true) {
+    followPlaylist(ownerId: $ownerId, playlistId: $playlistId, isPublic: $isPublic) {
+      id
+      following
+    }
+}
+`
+const unfollowPlaylistMutation = gql`
+mutation ($ownerId: String!, $playlistId: String!) {
+    unfollowPlaylist(ownerId: $ownerId, playlistId: $playlistId) {
+      id
+      following
+    }
+}
+`
 
 const playlistQuery = gql`
 query playlist($userId: String!, $playlistId: String!) {
   playlist(userId: $userId, playlistId: $playlistId) {
+    id
     name
     totalTracks
+    followerCount
+    following
     images {
         url
         width
         height
+    }
+    owner {
+        id
     }
     tracks {
       items {
@@ -67,11 +91,78 @@ class Index extends Component {
         super(props)
     }
 
+    followPlaylist = async () => {
+        const { id: playlistId, owner: { id: ownerId } } = this.props.data.playlist
+        this.props.followPlaylist({
+            variables: { playlistId, ownerId }
+        })
+    }
+
+    unfollowPlaylist = async () => {
+        const { id: playlistId, owner: { id: ownerId } } = this.props.data.playlist
+        this.props.unfollowPlaylist({
+            variables: { playlistId, ownerId }
+        })
+    }
+
+    renderTopSection() {
+        const { data: { playlist: { images, name, followerCount } }  } = this.props
+        const coverUrl = images && images.length && images[0].url
+        return (
+            <div className="root">
+                <div className="playlist-name">{name}</div>
+                <div className="main-section">
+                    { coverUrl && <ImageWithLoader url={coverUrl} style={{ width: '10em', flexShrink: 0, height: '10em' }}/>}
+                    <div className="playlist-info">
+                        <div className="playlist-follower-count">Followers: {followerCount}</div>
+                        {this.renderFollowToggle()}
+                    </div>
+                </div>
+                { /*language=CSS*/ }
+                <style jsx>{`
+                    .root {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        width: 100%;
+                        padding: 1em;
+                        box-sizing: border-box;
+                    }
+                    .main-section {
+                        display: flex;
+                        align-items: center;
+                    }
+                    .root :global(.btn) {
+                        margin-top: .5em;
+                    }
+                    .root :global(.image-with-loader) {
+                        margin-right: .5em;
+                    }
+                    .playlist-info {
+                        flex: 1;
+                    }
+                    .playlist-name {
+                        font-size: 1.8em;
+                        font-weight: 500;
+                    }
+                    .playlist-follower-count {
+                        margin-top: .5em;
+                        font-weight: 500;
+                    }
+                `}</style>
+            </div>
+        )
+    }
+
     renderPlaylist () {
         const { data: { playlist }  } = this.props
+        const { images } = playlist
+        const coverUrl = images && images.length && images[0].url
         return (
             <div>
-                <Playlist tracks={playlist.tracks.items.map(({track}) => track)} name={playlist.name} totalTracks={playlist.totalTracks} />
+                {this.renderTopSection()}
+                <Playlist tracks={playlist.tracks.items.map(({track}) => track)} name={playlist.name}
+                          totalTracks={playlist.totalTracks}/>
                 { /*language=CSS*/ }
                 <style jsx>{`
                     div {
@@ -82,6 +173,15 @@ class Index extends Component {
                     }
                 `}</style>
             </div>)
+    }
+
+    renderFollowToggle = () => {
+        const { data: { playlist: { following } }  } = this.props
+        if (following) {
+            return <Button color="blue" onClick={this.unfollowPlaylist} size="small">Unfollow</Button>
+        } else {
+            return <Button onClick={this.followPlaylist} size="small">Follow</Button>
+        }
     }
 
     render() {
@@ -109,4 +209,10 @@ const graphqlOptions = {
     }
 }
 
-export default withSentry(withData(graphql(playlistQuery, graphqlOptions)(Index)))
+export default withSentry(withData(
+    compose(
+        graphql(playlistQuery, graphqlOptions),
+        graphql(followPlaylistMutation, { name: 'followPlaylist' }),
+        graphql(unfollowPlaylistMutation, { name: 'unfollowPlaylist' })
+    )(Index)
+))

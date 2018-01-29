@@ -1,40 +1,9 @@
 import React, { Component } from 'react';
+import { Collapse } from 'react-collapse'
 
 import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
-import { Collapse } from 'react-collapse'
-
-
-const Divider = ({name, onClick, expanded}) => {
-    return (
-        <div className="root" onClick={onClick}>
-            <div className="top">
-                <div className="name">{name}</div>
-                { onClick && <div>{expanded ? "Collapse" : "Expand"}</div>}
-            </div>
-            { /*language=CSS*/ }
-            <style jsx>{`
-                .root {
-                    width: 100%;
-                }
-                .name {
-                    font-size: 1.2em;
-                }
-                .top {
-                    color: white;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: space-between;
-                    padding: .5em .5em;
-                    background-color: ${backGroundOrange};
-                    text-transform: capitalize;
-                    font-size: 1.2em;
-                }
-            `}</style>
-        </div>
-    )
-}
-
+import Expand from '../images/expand-more.svg'
 
 export default class Playlist extends Component {
     state = { expanded : true }
@@ -52,18 +21,56 @@ export default class Playlist extends Component {
     renderTracks() {
         const { tracks } = this.props
         return tracks.map((track, i) => {
-                return <Track key={i} track={track}/>
+            return <Track key={i} track={track}/>
         })
     }
 
+    renderDivider() {
+        const { name } = this.props
+        const { expanded } = this.state
+        const onClick = this.props.collapsable && this.toggleExpand
+        return (
+            <div className="root" onClick={onClick}>
+                <div className="top">
+                    <div className="name">{name}</div>
+                    { onClick && <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>}
+                </div>
+                { /*language=CSS*/ }
+                <style jsx>{`
+                .root {
+                    width: 100%;
+                }
+                .name {
+                    font-size: 1.2em;
+                }
+                .top {
+                    color: white;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: .5em .5em;
+                    background-color: ${backGroundOrange};
+                    text-transform: capitalize;
+                    font-size: 1.2em;
+                }
+                    .top :global(.expand) {
+                        transform: rotate(90deg);
+                        transition: all .25s;
+                        fill: white;
+                    }
+                    .top :global(.expanded) {
+                        transform: rotate(0deg);
+                    }
+            `}</style>
+            </div>
+        )
+    }
+
     render() {
-        const { name, totalTracks, tracks } = this.props
         const { expanded } = this.state
         return (
             <div className="root">
-                {
-                    <Divider name={name} onClick={this.props.collapsable && this.toggleExpand} expanded={expanded}/>
-                }
+                {this.renderDivider()}
                 <Collapse isOpened={expanded} hasNestedCollapse>
                     {this.renderTracks()}
                 </Collapse>

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Color from 'color'
 
-import { backGroundOrange } from '../utils/colors'
+import { backGroundOrange, backGroundBlue } from '../utils/colors'
 
 const colors = {
-    orange: backGroundOrange
+    orange: backGroundOrange,
+    blue: backGroundBlue
 }
 
 export default class Button extends Component {
@@ -14,6 +15,7 @@ export default class Button extends Component {
     }
     render() {
         const color = colors[this.props.color]
+        const { outlined } = this.props
         return (
             <div className={`btn ${this.props.size}`} onClick={this.props.onClick}>
                 { /*language=CSS*/ }

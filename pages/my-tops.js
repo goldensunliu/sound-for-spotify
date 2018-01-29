@@ -326,7 +326,7 @@ class Index extends Component {
         return (
             <div>
                 {this.renderTopTrackStats()}
-                <Playlist tracks={topTracks} name="Top Tracks For You" isCollapsed={true} collapsable={true}/>
+                <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={true} collapsable={true}/>
                 {this.renderTopGenres()}
                 {/*language=CSS*/}
                 <style jsx>{`
