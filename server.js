@@ -7,6 +7,9 @@ import cookieParser from 'cookie-parser'
 import { makeSchema } from "graphql-spotify";
 import { APOLLO_ENGINE_API_KEY } from './spotify-config'
 import { Engine } from 'apollo-engine'
+import { mergeSchemas } from 'graphql-tools';
+import { genreSchema, linkTypeDefs, mergeResolvers } from './graphql/genre-noises'
+
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -43,8 +46,12 @@ async function start() {
             // this is set the client side via the the implicit Spotify Auth flow
             const token = req.query['token']
             const schema = makeSchema(token)
+            const mergedSchema =  mergeSchemas({
+                schemas: [schema, genreSchema, linkTypeDefs],
+                resolvers: mergeResolvers
+            })
             return {
-                schema,
+                schema: mergedSchema,
                 tracing: true,
                 cacheControl: true
             }
