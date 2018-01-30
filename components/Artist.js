@@ -101,10 +101,11 @@ class Artist extends Component {
 
     renderPopoverBody() {
         const { name, genres } = this.props.data.artist
+        const classified = genres && genres.length > 0
         return (
             <div>
-                <div className="name">{name} is associated with:</div>
-                <GenreRow genres={genres}/>
+                <div className="name">{name}</div>
+                { classified && <GenreRow genres={genres}/> }
                 {/*language=CSS*/}
                 <style jsx>{`
                     .name {
