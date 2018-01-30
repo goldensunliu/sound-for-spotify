@@ -16,14 +16,12 @@ function withSentry (Child) {
       this.state = {
         error: null
       }
-      Raven.config(
-        SENTRY_DSN
-      ).install()
+      if (SENTRY_DSN) Raven.config(SENTRY_DSN).install()
     }
 
     componentDidCatch (error, errorInfo) {
       this.setState({ error })
-      Raven.captureException(error, { extra: errorInfo })
+      if (SENTRY_DSN) Raven.captureException(error, { extra: errorInfo })
     }
 
     render () {
