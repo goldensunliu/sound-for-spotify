@@ -20,7 +20,8 @@ function parseUserAndPlaylistId(url) {
 }
 
 async function getGenreNoises(genre) {
-    const result = await getPlaylists(genre)
+    const id = genre.replace(/\W/g, '').toLowerCase()
+    const result = await getPlaylists(id)
     if (!result) return null
     let {corelist, pulse, edge} = result
     return { id: genre, coreRef: corelist, pulseRef: pulse, edgeRef: edge }
@@ -69,6 +70,35 @@ export const genreSchema = makeExecutableSchema({
     }
 });
 
+export const linkTypeDef2nd = `
+  extend type GenreNoises {
+    related: [GenreNoises]
+  }
+`
+
+export const mergeResolvers2nd = mergeInfo =>({
+    GenreNoises: {
+        related: {
+            // when https://github.com/apollographql/graphql-tools/issues/602 is resolved, explicity set the fields needs
+            // right now it is assumeed client always query { corelist { description } } for this to wrok
+            fragment: `fragment RelatedGenresFragment on GenreNoises { id }`,
+            resolve: async (parent, args, context, info) => {
+                if (!parent.corelist || !parent.corelist.description) return
+                let { corelist: { description } } = parent
+                const $ = cheerio.load(description)
+                const relatedGenres = $('a').map((i, el) => $(el).text()).get().slice(2)
+                return await mergeInfo.delegate(
+                    'query',
+                    'genreNoises',
+                    { genres: relatedGenres },
+                    context,
+                    info,
+                )
+            }
+        }
+    }
+})
+
 export const mergeResolvers = mergeInfo => ({
     GenreNoises: {
         corelist: {
@@ -85,7 +115,7 @@ export const mergeResolvers = mergeInfo => ({
             }
         },
         pulse: {
-            fragment: `fragment PulsePlaylistPointerFragment on GenreNoises { pulseRef { userId, playlistId } }`,
+            fragment: `fragment PulsePlaylistPointerFragment on GenreNoises { id pulseRef { userId, playlistId } }`,
             resolve : async (parent, args, context, info) => {
                 let { pulseRef : { userId, playlistId } } = parent
                 return await mergeInfo.delegate(
@@ -98,7 +128,7 @@ export const mergeResolvers = mergeInfo => ({
             }
         },
         edge: {
-            fragment: `fragment EdgePlaylistPointerFragment on GenreNoises { edgeRef { userId, playlistId } }`,
+            fragment: `fragment EdgePlaylistPointerFragment on GenreNoises { id edgeRef { userId, playlistId } }`,
             resolve : async (parent, args, context, info) => {
                 let { edgeRef : { userId, playlistId } } = parent
                 return await mergeInfo.delegate(

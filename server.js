@@ -8,7 +8,7 @@ import { makeSchema } from "graphql-spotify";
 import { APOLLO_ENGINE_API_KEY } from './spotify-config'
 import { Engine } from 'apollo-engine'
 import { mergeSchemas } from 'graphql-tools';
-import { genreSchema, linkTypeDefs, mergeResolvers } from './graphql/genre-noises'
+import { genreSchema, linkTypeDefs, linkTypeDef2nd, mergeResolvers, mergeResolvers2nd } from './graphql/genre-noises'
 
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -46,9 +46,13 @@ async function start() {
             // this is set the client side via the the implicit Spotify Auth flow
             const token = req.query['token']
             const schema = makeSchema(token)
-            const mergedSchema =  mergeSchemas({
+            let mergedSchema =  mergeSchemas({
                 schemas: [schema, genreSchema, linkTypeDefs],
                 resolvers: mergeResolvers
+            })
+            mergedSchema = mergeSchemas({
+                schemas: [mergedSchema, linkTypeDef2nd],
+                resolvers: mergeResolvers2nd
             })
             return {
                 schema: mergedSchema,
