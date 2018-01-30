@@ -28,16 +28,13 @@ const Artists = ({artists}) => {
             ))}
             {/*language=CSS*/}
             <style jsx>{`
-                .artist {
+                .artists {
                     display: flex;
                     align-items: center;
+                    flex-wrap: wrap;
                 }
-                .artist:not(:last-child) {
-                    margin-bottom: .4em;
-                }
-                .name {
-                    font-size: 1em;
-                    font-weight: 500;
+                .artists :global(.artist) {
+                    margin: .3em;
                 }
                 .artist :global(.image-with-loader) {
                     flex-shrink: 0;

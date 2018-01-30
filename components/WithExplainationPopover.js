@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Popover from 'react-popover'
 
 import { AttributeConfig } from '../utils/AttributeConfig'
+import { backGroundGrey } from "../utils/colors";
 
 export default class WithExplainationPopover extends React.Component {
     state = { open: false }
@@ -32,7 +33,7 @@ export default class WithExplainationPopover extends React.Component {
             </div>
         )
         return (
-            <Popover style={{ width: '80vw', maxWidth: '20em' }} preferPlace="below" body={body} onOuterAction={this.handleClose}
+            <Popover style={{ width: '90vw', maxWidth: '40em' }} preferPlace="below" body={body} onOuterAction={this.handleClose}
                      isOpen={this.state.open} refreshIntervalMs={300}>
                 <div onClick={this.toggleOpen}>
                     {this.props.render(this.state)}

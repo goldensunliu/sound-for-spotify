@@ -84,9 +84,8 @@ body {
 .Popover-body {
     display: inline-flex;
     flex-direction: column;
-    color: white;
     padding: .5rem 1rem;
-    background: ${backGroundGrey};
+    background: white;
     border-radius: 0.3rem;
     opacity: .95;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
@@ -94,7 +93,7 @@ body {
 }
 
 .Popover-tipShape {
-    fill: ${backGroundGrey};
+    fill: ${backGroundBlue};
 }
 
 .Popover-white .Popover-tipShape {
