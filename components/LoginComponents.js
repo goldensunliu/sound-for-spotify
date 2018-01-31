@@ -57,6 +57,7 @@ export const PendingState = ({ loggingIn }) => {
                     align-items: center;
                     justify-content: center;
                     flex-direction: column;
+                    background: linear-gradient(135deg, white, #FF9574);
                 }
                 :global(.Typist), .copy {
                     font-size: 1.5em;

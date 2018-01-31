@@ -6,6 +6,7 @@ import Color from 'color'
 
 import ImageWithLoader from './ImageWithLoader'
 import Spinner from '../components/spinner'
+import GenresRow from '../components/GenresRow'
 import { backGroundOrange, backGroundGrey } from "../utils/colors"
 
 
@@ -65,29 +66,6 @@ const ArtistAvatar = ({images, name}) => {
     }
 }
 
-const GenreRow = ({genres}) => {
-    return (
-        <div className="genre-row">
-            {genres.map((g, i) => <div className="pill" key={i}>{g}</div>)}
-            {/*language=CSS*/}
-            <style jsx>{`
-                .genre-row {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-                .pill {
-                    flex-shrink: 0;
-                    display: flex;
-                    font-size: 1.1em;
-                    margin: .25em;
-                    padding: .2em .6em;
-                    box-shadow: 0 1.5px 3px 0 ${Color(backGroundOrange).darken(.5).hsl().string()};
-                }
-            `}</style>
-        </div>
-    )
-}
-
 class Artist extends Component {
     state = { open: false }
     handleClose = () => {
@@ -105,7 +83,7 @@ class Artist extends Component {
         return (
             <div>
                 <div className="name">{name}</div>
-                { classified && <GenreRow genres={genres}/> }
+                { classified && <GenresRow genres={genres}/> }
                 {/*language=CSS*/}
                 <style jsx>{`
                     .name {

@@ -54,6 +54,7 @@ async function start() {
                 schemas: [mergedSchema, linkTypeDef2nd],
                 resolvers: mergeResolvers2nd
             })
+            // the whole execution takes about 20ms
             return {
                 schema: mergedSchema,
                 tracing: true,

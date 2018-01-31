@@ -2,17 +2,20 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
+import { Collapse } from 'react-collapse'
 
 import LoadingFullScreen from '../components/LoadingFullScreen'
-import {Collapse} from 'react-collapse'
 import AudioFeatureIcon from '../components/AudioFeatureIcon'
 import Playlist from '../components/Playlist'
+import Expand from '../images/expand-more.svg'
 
 import withData from '../with-apollo/withData'
 import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
 import round from '../utils/round'
 import Layout from '../components/Layout'
+import GenresRow from '../components/GenresRow'
+import Button from '../components/button'
 import { backGroundOrange } from "../utils/colors";
 
 function BarChartWrapper({ data, attributeKey}) {
@@ -25,13 +28,13 @@ function BarChartWrapper({ data, attributeKey}) {
     return (
         <VictoryChart
             animate
-            height={200}
-            padding={50}
+            height={250}
+            padding={{ top: 60, bottom: 30, left: 20, right: 20 }}
             style={{
                 parent: { backgroundColor: "white"}
             }}
         >
-            <VictoryBar data={data} x={x} y={1} labels={(d) => d.y}
+            <VictoryBar data={data} x={x} y={1} labels={(d) => d.y} alignment="start"
                         style={{ data: { fill: backGroundOrange } }} cornerRadius={5}/>
             <VictoryAxis crossAxis={false} domain={{x : xDomain}}/>
 
@@ -82,10 +85,6 @@ function getGenreCount(artists) {
     const sorted = Object.entries(genreCount).map(([genre, count]) => ({genre, count}))
     sorted.sort((a, b) => (b.count - a.count))
     return sorted
-}
-
-function getAudioFeatures(tracksFeatures) {
-
 }
 
 const topTypesQuery = gql`
@@ -146,102 +145,187 @@ query ($timeRange: TimeRange = medium_term) {
 }
 `
 
-const Genre = ({ genre, count, total }) => {
-    return (
-        <div className="root">
-            <div className="genre">{genre}</div>
-            {/*language=CSS*/}
-            <style jsx>{`
-                .root {
-                    background-color: ${backGroundOrange};
-                    color: white;
-                    font-weight: bold;
-                    font-size: 1.2em;
-                    border-radius: 4px;
-                    width: 80%;
-                    height: 2em;
-                    margin: 2px;
-                    text-transform: capitalize;
-                    padding: 5px;
-                    display: flex;
-                    align-items: center;
-                    text-align: center;
-                    display: flex;
-                    justify-content: space-between;
-                }
-                .genre {
-                    font-size: 1.5em;
-                    white-space: nowrap;
-                }
-            `}</style>
-        </div>
-    )
-}
-
-const AttributeRow = ({ sum, count, attributeKey }) => {
+const AttributeRow = ({ sum, count, attributeKey, distributionMap, onClick, expanded }) => {
+    const sortedKeys = Object.keys(distributionMap).sort()
+    const min = sortedKeys[0]
+    const max = sortedKeys[sortedKeys.length - 1]
     let copy;
     if (attributeKey !== 'tempo') {
-        copy = `Avg ${attributeKey}: ${round(sum / count * 10, 0)}/10`
+        copy = `Min=${min*10}  Max=${max*10}  Avg=${round(sum / count * 10, 0)}/10`
     }
     else
     {
-        copy = `Avg ${attributeKey}: ${round(sum / count, 0)}`
+        copy = `Min=${min}  Max=${max}  Avg=${round(sum / count, 0)}`
     }
     return (
-        <div className="root">
-            <AudioFeatureIcon attributeKey={attributeKey}>
-                <div className="attribute-copy">{copy}</div>
-            </AudioFeatureIcon>
+        <div className="root" onClick={onClick}>
+            <div className="attribute-copy">
+                <b>{attributeKey}</b>
+                {copy}
+            </div>
+            <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>
             {/*language=CSS*/}
             <style jsx>{`
                 .root {
                     display: flex;
+                    cursor: pointer;
                     align-items: center;
+                    justify-content: space-between;
                     margin: .5em;
                     color: white;
                 }
-                .root :global(.attribute) {
-                    flex-direction: row;
-                    padding-left: .5em;
-                    paddign-right: .5em;
-                }
-                .root :global(.attribute svg) {
+                .root :global(.expand) {
+                    transform: rotate(90deg);
+                    transition: all .25s;
                     fill: white;
                 }
+                .root :global(.expanded) {
+                    transform: rotate(0deg);
+                }
+
                 .attribute-copy {
-                    font-size: 1.5em;
                     margin-left: .3em;
                     font-weight: 500;
                     text-transform: capitalize;
+                    flex: 1;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-right: .2em;
+                }
+                .attribute-copy b {
+                    font-size: 1.5em;
+                    margin-right: .2em;
                 }
             `}
             </style>
         </div>
     )
 }
+class AttributeSection extends Component {
+    state = { expanded: true }
 
-const AttributeSection = ({attributeKey, stats}) => {
-    const { sum, count, distributionMap } = stats
-    return (
-        <div className="root">
-            <AttributeRow {...{ sum, count, attributeKey }}/>
-            <BarChartWrapper data={Object.entries(distributionMap)} attributeKey={attributeKey}/>
-            {/*language=CSS*/}
-            <style jsx>{`
-                .root {
-                    border: .5em;
-                    overflow: hidden;
-                    background-color: ${backGroundOrange};
-                    border-radius: .4em;
-                    padding-bottom: .5em;
-                    border-left: 1px solid ${backGroundOrange};
-                    border-right: 1px solid ${backGroundOrange};
-                    margin-bottom: .6em;
-                }
-            `}
-            </style>
-        </div>
-    )
+    toggle = () => {
+        this.setState({ expanded: !this.state.expanded })
+    }
+
+    render() {
+        const {attributeKey, stats} = this.props
+        const { expanded } = this.state
+        const { sum, count, distributionMap } = stats
+        return (
+            <div className={`root${expanded ? "" : " collapsed"}`}>
+                <AttributeRow {...{ sum, count, distributionMap, attributeKey, expanded, onClick: this.toggle }}/>
+                <Collapse isOpened={expanded}>
+                    <div className="chart">
+                        <AudioFeatureIcon attributeKey={attributeKey}/>
+                        <BarChartWrapper data={Object.entries(distributionMap)} attributeKey={attributeKey}/>
+                    </div>
+                </Collapse>
+                {/*language=CSS*/}
+                <style jsx>{`
+                    .root {
+                        border: .5em;
+                        overflow: hidden;
+                        background-color: ${backGroundOrange};
+                        border-radius: .4em;
+                        border-left: 1px solid ${backGroundOrange};
+                        border-right: 1px solid ${backGroundOrange};
+                        margin-bottom: .6em;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                    }
+                    .root.collapsed {
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                    }
+                    .chart {
+                        position: relative;
+                        border-bottom: .4em solid ${backGroundOrange};
+                    }
+                    .chart :global(.with-popover) {
+                        position: absolute;
+                        z-index: 1;
+                        left: .2em;
+                        top: .2em;
+                    }
+                    .chart :global(.attribute) {
+                        height: 50px;
+                        width: 50px;
+                        justify-content: center;
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                        border-radius: 50%;
+                    }
+                    .chart :global(.attribute svg) {
+                        fill: ${backGroundOrange};
+                    }
+                `}
+                </style>
+            </div>
+        )
+    }
+}
+
+class TopGenres extends Component {
+    state = { showAll: false }
+
+    toggle = () => {
+        this.setState({ showAll: !this.state.showAll })
+    }
+
+    render() {
+        const { genreCount } = this.props
+        return (
+            <div className="top-genres">
+                <div className="header">Your Top Artists Genres</div>
+                <div className="genres">
+                    <GenresRow genres={genreCount.slice(0,
+                        !this.state.showAll ? 20 : genreCount.length).map(({ genre, count }) => genre)}/>
+                </div>
+                <div className="bottom-toggle" onClick={this.toggle}>
+                    {!this.state.showAll ? "show all" : "show less"}
+                </div>
+                {/*language=CSS*/}
+                <style jsx>{`
+                    .top-genres {
+                        width: 100%;
+                        border: .5em;
+                        overflow: hidden;
+                        box-sizing: border-box;
+                        border-radius: .4em;
+                        padding-bottom: .5em;
+                        background-color: ${backGroundOrange};
+                        border-left: 1px solid ${backGroundOrange};
+                        border-right: 1px solid ${backGroundOrange};
+                        margin-bottom: .6em;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                    }
+                    .header {
+                        text-align: center;
+                        color: white;
+                    }
+                    .genres {
+                        display: flex;
+                            padding: .4em;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: white;
+                    }
+                    .genres :global(.pill) {
+
+                    }
+                    .bottom-toggle {
+                        cursor: pointer;
+                        font-size: 1.2em;
+                        margin-top: .2em;
+                        font-weight: 500;
+                        color: white;
+                        text-align: center;
+                    }
+                `}
+                </style>
+            </div>
+        )
+    }
 }
 
 class Index extends Component {
@@ -252,39 +336,6 @@ class Index extends Component {
 
     constructor (props) {
         super(props)
-    }
-
-    renderTopGenres() {
-        const { genreCount, data: { topArtists : { items } } } = this.props
-        return (
-            <div className="root">
-                <div className="header">Your Top Artists Genres</div>
-                <div className="genres">
-                    {
-                        genreCount.slice(0, 12).map(
-                            ({ genre, count }, i) => (<Genre key={i} genre={genre} count={count} total={items.length}/>)
-                        )
-                    }
-                </div>
-                {/*language=CSS*/}
-                <style jsx>{`
-                    .root {
-                        width: 100%;
-                    }
-                    .header {
-                        text-align: center;
-                        margin-bottom: 1em;
-                    }
-                    .genres {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                `}
-                </style>
-            </div>
-        )
     }
 
     renderTopTrackStats() {
@@ -322,21 +373,22 @@ class Index extends Component {
     }
 
     renderTops () {
-        const { data: { topTracks: { items: topTracks }}} = this.props
+        const { data: { topTracks: { items: topTracks }}, genreCount} = this.props
         return (
-            <div>
+            <div className="root">
+                <TopGenres genreCount={genreCount}/>
                 {this.renderTopTrackStats()}
                 <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={true} collapsable={true}/>
-                {this.renderTopGenres()}
                 {/*language=CSS*/}
                 <style jsx>{`
-                    div {
+                    .root {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         width: 100%;
                         max-width: 600px;
                         margin: auto;
+                        margin-top: 1.5em;
                     }
                 `}</style>
             </div>)

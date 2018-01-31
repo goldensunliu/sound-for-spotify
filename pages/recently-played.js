@@ -54,7 +54,6 @@ class Index extends Component {
 
     toggleExpand = () => {
         this.setState({ collapseAll: !this.state.collapseAll })
-         process.browser.heheheheh(1)
     }
 
     renderSessions () {

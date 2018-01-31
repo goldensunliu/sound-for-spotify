@@ -69,7 +69,7 @@ export default class Playlist extends Component {
     render() {
         const { expanded } = this.state
         return (
-            <div className="root">
+            <div className={`root${expanded ? " expanded" : ""}`}>
                 {this.renderDivider()}
                 <Collapse isOpened={expanded} hasNestedCollapse>
                     {this.renderTracks()}
@@ -77,8 +77,7 @@ export default class Playlist extends Component {
                 { /*language=CSS*/ }
                 <style jsx>{`
                         .root {
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                            border-bottom: .5em solid ${backGroundOrange};
+                            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                             border-radius: 6px;
                             width: 100%;
                             margin-bottom: 15px;
@@ -89,6 +88,10 @@ export default class Playlist extends Component {
                             .root {
                                 width: 600px;
                             }
+                        }
+                        .root.expanded {
+                            border-bottom: .4em solid ${backGroundOrange};
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
                         }
                     `}
                 </style>

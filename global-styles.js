@@ -56,7 +56,7 @@ a {
     text-decoration: none;
 }
 .pill {
-    background-color: ${backGroundOrange};
+    background: linear-gradient(135deg, ${backGroundOrange}, #FF764B);
     color: white;
     font-weight: bold;
     font-size: .9em;

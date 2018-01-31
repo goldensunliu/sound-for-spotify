@@ -12,22 +12,7 @@ import checkLogin from '../utils/checkLogin'
 import Layout from '../components/Layout'
 import ImageWithLoader from '../components/ImageWithLoader'
 
-const followPlaylistMutation = gql`
-mutation ($ownerId: String!, $playlistId: String!, $isPublic: Boolean = true) {
-    followPlaylist(ownerId: $ownerId, playlistId: $playlistId, isPublic: $isPublic) {
-      id
-      following
-    }
-}
-`
-const unfollowPlaylistMutation = gql`
-mutation ($ownerId: String!, $playlistId: String!) {
-    unfollowPlaylist(ownerId: $ownerId, playlistId: $playlistId) {
-      id
-      following
-    }
-}
-`
+import { withFollowPlaylist, withUnfollowPlaylist } from '../components/graphqlHelpers'
 
 const playlistQuery = gql`
 query playlist($userId: String!, $playlistId: String!) {
@@ -144,6 +129,7 @@ class Index extends Component {
                     .playlist-name {
                         font-size: 1.8em;
                         font-weight: 500;
+                        margin-bottom: .4em;
                     }
                     .playlist-follower-count {
                         margin-top: .5em;
@@ -212,7 +198,7 @@ const graphqlOptions = {
 export default withSentry(withData(
     compose(
         graphql(playlistQuery, graphqlOptions),
-        graphql(followPlaylistMutation, { name: 'followPlaylist' }),
-        graphql(unfollowPlaylistMutation, { name: 'unfollowPlaylist' })
+        withUnfollowPlaylist,
+        withFollowPlaylist
     )(Index)
 ))

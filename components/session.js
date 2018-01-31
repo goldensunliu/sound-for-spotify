@@ -69,7 +69,7 @@ export default class Session extends Component {
         const { played_at } = session[session.length - 1]
         const now = new Date();
         return (
-            <div className={`root${!expanded ? '' : ' collapsed'}`}>
+            <div className={`root${expanded ? '' : ' collapsed'}`}>
                 {
                     <SessionDivider toggleExpand={this.toggleExpand} playedAt={new Date(played_at)} now={now} length={session.length}/>
                 }
