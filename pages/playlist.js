@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import { toast } from 'react-toastify'
 
 import Playlist from '../components/Playlist'
 
@@ -76,6 +77,18 @@ class Index extends Component {
         super(props)
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.data.loading) return
+        const { data: { playlist: { following, name } }  } = this.props
+        if (following !== nextProps.data.playlist.following)
+        {
+            const msg = `${nextProps.data.playlist.following ? "Following": "Unfollowed"} ${name}!`
+            toast.success(msg, {
+                position: toast.POSITION.TOP_CENTER
+            })
+        }
+    }
+
     followPlaylist = async () => {
         const { id: playlistId, owner: { id: ownerId } } = this.props.data.playlist
         this.props.followPlaylist({
@@ -91,7 +104,7 @@ class Index extends Component {
     }
 
     renderTopSection() {
-        const { data: { playlist: { images, name, followerCount } }  } = this.props
+        const { data: { playlist: { images, name } }  } = this.props
         const coverUrl = images && images.length && images[0].url
         return (
             <div className="root">
@@ -99,7 +112,6 @@ class Index extends Component {
                 <div className="main-section">
                     { coverUrl && <ImageWithLoader url={coverUrl} style={{ width: '10em', flexShrink: 0, height: '10em' }}/>}
                     <div className="playlist-info">
-                        <div className="playlist-follower-count">Followers: {followerCount}</div>
                         {this.renderFollowToggle()}
                     </div>
                 </div>

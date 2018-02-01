@@ -3,6 +3,7 @@ import NextHead from 'next/head'
 import NavMenu, { Footer } from './NavMenu'
 import GlobalStyles from '../global-styles'
 import Router from 'next/router'
+import { ToastContainer } from 'react-toastify';
 
 Router.onRouteChangeStart = () => {
     document.body.classList.add('loading')
@@ -22,6 +23,7 @@ const Layout = ({name, children, hideMenu}) =>{
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
             </NextHead>
             { !hideMenu && <NavMenu/> }
+            <ToastContainer/>
             <div className="root">
                 <div className="body">
                     {children}

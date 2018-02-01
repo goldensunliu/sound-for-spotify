@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo'
 import Link from 'next/link'
 import Router from 'next/router'
 import { Collapse } from 'react-collapse'
+import { toast } from 'react-toastify';
 
 import Button from '../components/button'
 import { backGroundOrange, backGroundGrey, backGroundBlue } from '../utils/colors'
@@ -88,6 +89,16 @@ const graphalOptions = {
 
 class ExpandedContent extends Component {
 
+    componentWillReceiveProps(nextPRops) {
+        if (this.props.data.loading) return
+        const { data: { track: { saved }}, track: { name }} = this.props
+        if (nextPRops.data.track.saved !== saved) {
+            const msg = `${nextPRops.data.track.saved ? "Saved": "Removed"} ${name}!`
+            toast.success(msg, {
+                position: toast.POSITION.TOP_CENTER
+            })
+        }
+    }
     saveTrack = async () => {
         const { id } = this.props.track
         this.props.saveTrack({

@@ -3,9 +3,10 @@ import { graphql, compose } from 'react-apollo'
 import Link from 'next/link'
 import gql from 'graphql-tag'
 import Popover from 'react-popover'
+import { toast } from 'react-toastify';
 
 import Layout from '../components/Layout'
-import {backGroundBlue, backGroundGrey, backGroundOrange} from "../utils/colors";
+import {backGroundBlue, backGroundGreen, backGroundOrange} from "../utils/colors";
 import GenresRow from '../components/GenresRow'
 import checkLogin from '../utils/checkLogin'
 import withSentry from '../raven'
@@ -21,6 +22,18 @@ const lastYearCopy = (genre) => `New or newly released songs most distinctively 
 
 class PlaylistInfo extends Component {
     state = { open: false }
+
+    componentWillReceiveProps(nextProps) {
+        const { name } = this.props
+        const { following } = this.props.playlist
+        if (following !== nextProps.playlist.following)
+        {
+            const msg = `${nextProps.playlist.following ? "Following": "Unfollowed"} ${name}!`
+            toast.success(msg, {
+                position: toast.POSITION.TOP_CENTER
+            })
+        }
+    }
     followPlaylist = async () => {
         const { id: playlistId, owner: { id: ownerId } } = this.props.playlist
         this.props.followPlaylist({
@@ -82,6 +95,7 @@ class PlaylistInfo extends Component {
                         justify-content: center;
                         width: 100%;
                         text-align: center;
+                        font-size: 1.3em;
                     }
                     .ctas {
                         width: 100%;
@@ -97,10 +111,10 @@ class PlaylistInfo extends Component {
                         width: 50%;
                     }
                     .bottom-cta.unfollow {
-                        background-color: ${backGroundBlue};
+                        background-color: ${backGroundGreen};
                     }
                     .details-cta {
-                        background-color: ${backGroundGrey};
+                        background-color: ${backGroundBlue};
                         width: 50%;
                     }
                     .playlist .block {
