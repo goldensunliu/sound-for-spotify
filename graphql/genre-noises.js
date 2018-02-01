@@ -93,7 +93,7 @@ export const mergeResolvers2nd = mergeInfo =>({
                 if (!parent.corelist || !parent.corelist.description) return
                 let { corelist: { description } } = parent
                 const $ = cheerio.load(description)
-                const relatedGenres = $('a').map((i, el) => $(el).text()).get().slice(3)
+                const relatedGenres = $('a').map((i, el) => $(el).text()).get().slice(4)
                 return await mergeInfo.delegate(
                     'query',
                     'genreNoises',

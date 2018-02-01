@@ -157,6 +157,8 @@ class Index extends Component {
     renderCore() {
         const { genreNoises, id } = this.props
         const { corelist, pulse, edge, intro, lastYear } = genreNoises
+        // defensive filter out of nulls
+        const related = genreNoises.related.filter((i) => i)
         return (
             <div className="root">
                 <div className="playlists-lay-out">
