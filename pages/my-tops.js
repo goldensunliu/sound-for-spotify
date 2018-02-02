@@ -396,7 +396,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Insights Of Your Preferences">
+            <Layout name="Discover Your Top Preferences">
                 {this.props.data.topArtists ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )

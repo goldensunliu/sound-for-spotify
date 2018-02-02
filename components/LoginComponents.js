@@ -43,7 +43,7 @@ export const PendingState = ({ loggingIn }) => {
     return (
         <div className="root">
             {!loggingIn && <Typist className="copy">
-                Login To Explore Your Spotify Data Like Never Before!
+                Discover Your Sound Of Spotify
             </Typist>}
             {loggingIn && <Typist className="copy">
                 Logging In.........

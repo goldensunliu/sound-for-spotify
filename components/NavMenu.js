@@ -14,13 +14,11 @@ function logOut() {
 const NavMenu = ({ isOpen }) => {
     return (
         <Menu isOpen={isOpen} customBurgerIcon={<MenuSvg/>} width={ 200 } styles={MenuStyles}>
-            <div className="menu-item"><Link href="/dashboard"><a>Dashboard</a></Link></div>
-            <div className="menu-item"><div onClick={logOut}>Log Out</div></div>
-            <div className="menu-item"><Link href="/recently-played"><a>History</a></Link></div>
-            <div className="menu-item"><Link href="/my-tops"><a>Top Preferences</a></Link></div>
+            <div className="menu-item"><Link href="/recently-played"><a>Play History</a></Link></div>
+            <div className="menu-item"><Link href="/my-tops"><a>Discover Top Preferences</a></Link></div>
             <div className="menu-item"><Link href="/featured-playlists"><a>Featured Playlists</a></Link></div>
             <div className="menu-item"><Link href="/categories"><a>Categories</a></Link></div>
-            <div className="menu-item"><Link href="/graphiql"><a>Data Explorer</a></Link></div>
+            <div className="menu-item"><div onClick={logOut}>Log Out</div></div>
            { /*language=CSS*/ }
             <style jsx>{`
                 .menu-item, a {
