@@ -34,7 +34,13 @@ async function start() {
     await app.prepare()
 
     const server = express();
-    if (!dev) server.use(helmet())
+    if (!dev) server.use(helmet({
+        hsts : {
+          maxAge: 31536000,
+          includeSubDomains: true,
+          preload: true
+        }
+    }))
     server.use(compression())
     server.use(cookieParser())
     if (APOLLO_ENGINE_API_KEY) {
