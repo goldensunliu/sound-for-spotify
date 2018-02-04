@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet'
 import bodyParser from 'body-parser';
 import { graphqlExpress } from 'apollo-server-express';
 import compression from 'compression'
@@ -33,6 +34,7 @@ async function start() {
     await app.prepare()
 
     const server = express();
+    if (!dev) server.use(helmet())
     server.use(compression())
     server.use(cookieParser())
     if (APOLLO_ENGINE_API_KEY) {
