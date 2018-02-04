@@ -17,6 +17,17 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 const port = parseInt(process.env.PORT, 10) || 3000
 
+function middlewareRedirectToHTTPS (req, res, next) {
+    const isNotSecure = (!req.get('x-forwarded-port') && req.protocol !== 'https') ||
+        parseInt(req.get('x-forwarded-port'), 10) !== 443
+
+    if (isNotSecure) {
+        return res.redirect('https://' + req.get('host') + req.url)
+    }
+
+    next()
+}
+
 function attachEngine(server) {
     const engine = new Engine({
         engineConfig: {
@@ -34,13 +45,16 @@ async function start() {
     await app.prepare()
 
     const server = express();
-    if (!dev) server.use(helmet({
-        hsts : {
-          maxAge: 31536000,
-          includeSubDomains: true,
-          preload: true
-        }
-    }))
+    if (!dev) {
+        server.use(helmet({
+            hsts : {
+                maxAge: 31536000,
+                includeSubDomains: true,
+                preload: true
+            }
+        }))
+        server.use(middlewareRedirectToHTTPS)
+    }
     server.use(compression())
     server.use(cookieParser())
     if (APOLLO_ENGINE_API_KEY) {
