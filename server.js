@@ -18,7 +18,7 @@ const handle = app.getRequestHandler()
 const port = parseInt(process.env.PORT, 10) || 3000
 
 function middlewareRedirectToHTTPS (req, res, next) {
-    const protocol= context.req.headers['x-forwarded-proto']
+    const protocol= req.headers['x-forwarded-proto']
     const isNotSecure = protocol !== 'https'
 
     if (isNotSecure) {
