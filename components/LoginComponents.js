@@ -1,6 +1,7 @@
 import { CLIENT_ID, SCOPES } from "../spotify-config";
 import Button from './button'
 import Typist from 'react-typist'
+import Brand from './Brand'
 
 function redirectToLogin() {
     const redirectLink = `${window.location.protocol}//${window.location.host}/login`
@@ -42,8 +43,9 @@ const LoginCta = (
 export const PendingState = ({ loggingIn }) => {
     return (
         <div className="root">
-            {!loggingIn && <Typist className="copy">
-                Discover Your Sound Of Spotify
+            <Brand/>
+            {!loggingIn && <Typist className="copy" cursor={{ hideWhenDone: true }} avgTypingDelay={50}>
+                Get to Know Your Sound Of Spotify
             </Typist>}
             {loggingIn && <Typist className="copy">
                 Logging In.........
@@ -58,6 +60,9 @@ export const PendingState = ({ loggingIn }) => {
                     justify-content: center;
                     flex-direction: column;
                     background: linear-gradient(135deg, white, #FF9574);
+                }
+                .root :global(.sound-brand) {
+                    margin-bottom: 4em;
                 }
                 :global(.Typist), .copy {
                     font-size: 1.5em;
