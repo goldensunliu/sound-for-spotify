@@ -67,7 +67,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Browse Categories">
+            <Layout name="Browse Categories" header="Categories">
                 {this.props.data.categories ? this.renderCategories() : <LoadingFullScreen/>}
             </Layout>
         )

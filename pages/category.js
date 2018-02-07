@@ -84,7 +84,7 @@ class Index extends Component {
     render() {
         const { data: { category }  } = this.props
         return (
-            <Layout name={category && category.name || "Category"}>
+            <Layout name={category && category.name || "Category"} header={category && category.name || "Category"}>
                 {category ? this.renderPlaylists() : <LoadingFullScreen/>}
             </Layout>
         )

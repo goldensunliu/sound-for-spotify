@@ -32,6 +32,7 @@ const Artists = ({artists}) => {
                 .artists {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
                     flex-wrap: wrap;
                 }
                 .artists :global(.artist) {

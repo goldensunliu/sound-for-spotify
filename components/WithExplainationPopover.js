@@ -13,6 +13,15 @@ export default class WithExplainationPopover extends React.Component {
         event.preventDefault();
         this.setState({open: !this.state.open});
     }
+
+    close = () => {
+        this.setState({open: false});
+    }
+
+    open = () => {
+        this.setState({open: true});
+    }
+
     render() {
         const { label, explanation } = AttributeConfig[this.props.attributeKey];
         const body = (
@@ -34,7 +43,7 @@ export default class WithExplainationPopover extends React.Component {
         return (
             <Popover style={{ width: '90vw', maxWidth: '40em' }} preferPlace="below" body={body} onOuterAction={this.handleClose}
                      isOpen={this.state.open} refreshIntervalMs={300}>
-                <div onClick={this.toggleOpen} className="with-popover">
+                <div onClick={this.toggleOpen} className="with-popover" onMouseEnter={this.open} onMouseLeave={this.close}>
                     {this.props.render(this.state)}
                 </div>
             </Popover>

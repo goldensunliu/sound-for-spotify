@@ -74,8 +74,11 @@ class Index extends Component {
                 { /*language=CSS*/ }
                 <style jsx>{`
                     .root {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        width: 100%;
                         max-width: 600px;
-                        width: 600px;
                         margin: auto;
                     }
                     .track-wrapper {
@@ -85,6 +88,7 @@ class Index extends Component {
                         border-radius: 6px;
                         margin-bottom: 1em;
                         margin-top: 1em;
+                        width: 100%;
                     }
                 `}</style>
             </div>
@@ -95,7 +99,7 @@ class Index extends Component {
         const { data: { track } } = this.props
         return (
             <div>
-                <Layout name={ track && track.name || "Track" }>
+                <Layout name={ track && track.name || "Track" } header={`Track Details`}>
                     {track ? this.renderTrackSection() : <LoadingFullScreen/>}
                 </Layout>
             </div>

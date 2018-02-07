@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {backGroundOrange} from "../utils/colors";
 
-class SoundBar extends Component {
+export class SoundBar extends Component {
     static defaultProps = {
         maxBars : 5
     }

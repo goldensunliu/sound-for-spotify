@@ -77,7 +77,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Browse Featured Playlists">
+            <Layout name="Browse Featured Playlists" header="Featured Playlists">
                 {this.props.data.featuredPlaylists ? this.renderSessions() : <LoadingFullScreen/>}
             </Layout>
         )

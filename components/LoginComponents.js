@@ -37,6 +37,10 @@ const LoginCta = (
     <Button size="large" onClick={redirectToLogin}>
         <img src="/static/Spotify_White.png"/>
         Login
+        { /*language=CSS*/ }
+        <style jsx>{`
+            img { width: 1em; height: 1em; margin-right: .25em; }
+        `}</style>
     </Button>
 )
 
@@ -44,9 +48,9 @@ export const PendingState = ({ loggingIn }) => {
     return (
         <div className="root">
             <Brand/>
-            {!loggingIn && <Typist className="copy" cursor={{ hideWhenDone: true }} avgTypingDelay={50}>
-                Get to Know Your Sound Of Spotify
-            </Typist>}
+            {!loggingIn && <div className="copy">
+                Find your sound preferences with music intelligence data about artists, albums, and tracks straight from <img className="spotify-logo" src="/static/Spotify_Logo_RGB_Black.png"/>
+            </div>}
             {loggingIn && <Typist className="copy">
                 Logging In.........
             </Typist>}
@@ -66,11 +70,18 @@ export const PendingState = ({ loggingIn }) => {
                 }
                 :global(.Typist), .copy {
                     font-size: 1.5em;
-                    max-width: 400px;
+                    max-width: 600px;
                     text-align: center;
                     margin-bottom: 1em;
                 }
-                :global(img) { width: 1em; height: 1em; margin-right: .25em; }
+                .copy {
+                    padding: .4em;
+                    line-height: 1.3em;
+                }
+                .spotify-logo {
+                    height: 1.3em;
+                    margin-bottom: -.2em;
+                }
             `}</style>
         </div>
     )

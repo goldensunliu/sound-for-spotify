@@ -13,7 +13,7 @@ Router.onRouteChangeComplete = url => {
     document.body.classList.remove('loading')
 }
 
-const Layout = ({name, children, hideMenu}) =>{
+const Layout = ({name, children, hideMenu, header}) =>{
     return(
         <div>
             <NextHead>
@@ -27,6 +27,7 @@ const Layout = ({name, children, hideMenu}) =>{
             <ToastContainer/>
             <div className="root">
                 <div className="body">
+                    { header && <div className="header">{header}</div> }
                     {children}
                 </div>
                 <Footer/>
@@ -41,10 +42,17 @@ const Layout = ({name, children, hideMenu}) =>{
                     align-items: center;
                     justify-content: space-between;
                 }
+                .header {
+                    font-size: 2em;
+                    margin-bottom: .5em;
+                    margin-top: .5em;
+                    margin-left: .4em;
+                }
                 .body {
                     display: flex;
                     flex: 1;
                     width: 100vw;
+                    flex-direction: column;
                 }
             `}</style>
         </div>

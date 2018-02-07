@@ -71,8 +71,8 @@ class Index extends Component {
                 { /*language=CSS*/ }
                 <style jsx>{`
                     .collapse-toggle {
-                        margin-top: .5em;
-                        margin-bottom: .5em;
+                        margin-top: 1em;
+                        margin-bottom: 1em;
                     }
                     div {
                         display: flex;
@@ -87,7 +87,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="View Your Spotify Play History With Audio Feature Insights">
+            <Layout name="Your Spotify Play History" header="Recently Played Sessions">
                 {this.props.data.recentlyPlayed ? this.renderSessions() : <LoadingFullScreen/>}
             </Layout>
         )
