@@ -145,8 +145,9 @@ class ExpandedContent extends Component {
                         }
                     </div>
                 </div>
-                {audio_features ? <AudioFeatures trackId={id}/>: null}
+                <div className="tip">click an artist to discover related genres</div>
                 <Artists artists={artists}/>
+                {audio_features ? <AudioFeatures trackId={id}/>: null}
                 <div className="music-stuff">
                     <div className="pill">{PitchClasses[audio_features.key]} {audio_features.mode ? 'Major' : 'Minor'}</div>
                     <div className="pill">{audio_features.time_signature} beats/bar</div>
@@ -158,6 +159,9 @@ class ExpandedContent extends Component {
                     }
                     .root>:global(div) {
                         margin-top: .8em;
+                    }
+                    .tip {
+                        text-align: center;
                     }
                     .divider {
                         border-top: 1px solid ${Color(backGroundGrey).lighten(.6).hsl().string()};

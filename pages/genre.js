@@ -13,6 +13,7 @@ import withSentry from '../raven'
 import withData from '../with-apollo/withData'
 import LoadingFullScreen from '../components/LoadingFullScreen'
 import { withFollowPlaylist, withUnfollowPlaylist } from '../components/graphqlHelpers'
+import Help from '../images/help-button.svg'
 
 const edgeCopy = (genre) => `Some recent less-known music that fans of ${genre} are listening to now`
 const pulseCopy = (genre) => `The music that fans of ${genre} are listening to now`
@@ -66,7 +67,7 @@ class PlaylistInfo extends Component {
                     <Popover style={{ width: '70vw', maxWidth: '40em' }} preferPlace="below" body={copy} onOuterAction={this.handleClose}
                              isOpen={this.state.open} refreshIntervalMs={300}>
                         <div className="name" onClick={this.toggleOpen}>
-                            {name}
+                            {name} <Help style={{width: '.8em', marginLeft: '.2em', fill: backGroundOrange }}/>
                         </div>
                     </Popover>
                     <div className="ctas">
@@ -144,6 +145,49 @@ const ConnectedPlaylistInfo = compose(
     withUnfollowPlaylist
 )(PlaylistInfo)
 
+const ExplainationBody = (({genre}) => (
+    <div>a collection of algorithmically-generated playlists of the {genre} genre-space, based on data tracked and analyzed by Spotify.</div>
+))
+
+class Explaination extends Component {
+    state = { open: false }
+    toggleOpen = (event) => {
+        // This prevents ghost click.
+        event.preventDefault();
+        this.setState({open: !this.state.open});
+    }
+
+    close = () => {
+        this.setState({open: false});
+    }
+
+    open = () => {
+        this.setState({open: true});
+    }
+
+    render() {
+        const { genre } = this.props
+       return (
+           <Popover className="with-popover" style={{ width: '90vw', maxWidth: '40em' }}
+                    isOpen={this.state.open} body={<ExplainationBody genre={genre}/>} preferPlace="below">
+               <div className={`discover`} onClick={this.toggleOpen} onMouseEnter={this.open} onMouseLeave={this.close}>
+                Discover <Help style={{width: '.8em', marginLeft: '.2em' }}/>
+                { /*language=CSS*/ }
+                <style jsx>{`
+                    .discover {
+                        font-size: 2em;
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                    }
+                `}</style>
+               </div>
+
+           </Popover>
+       )
+    }
+}
+
 class Index extends Component {
     constructor (props) {
         super(props)
@@ -162,8 +206,8 @@ class Index extends Component {
         return (
             <div className="root">
                 <div className="playlists-lay-out">
-                    <div className={`discover`}>Discover</div>
                     <div className={`genre`}>{id}</div>
+                    <Explaination genre={id}/>
                     <div className="playlists">
                         { intro && <ConnectedPlaylistInfo playlist={intro} name="The Intro" copy={introCopy(id)}/>}
                         { corelist &&  <ConnectedPlaylistInfo playlist={corelist} name="The Sound" copy={coreCopy(id)}/>}
@@ -173,7 +217,7 @@ class Index extends Component {
                     </div>
                 </div>
                 <div className="genres">
-                    <div className={`related`}>Related</div>
+                    <div className={`related`}>Related Genres</div>
                     <GenresRow genres={genreNoises.related.map(({id}) => id )}/>
                 </div>
                 { /*language=CSS*/ }
@@ -184,9 +228,6 @@ class Index extends Component {
                         width: 100%;
                         flex-direction: column;
                     }
-                    .discover {
-                        font-size: 2em;
-                    }
                     .related {
                         font-size: 1.5em;
                         text-align: center;
@@ -195,6 +236,7 @@ class Index extends Component {
                     }
                     .genres :global(.genre-row) {
                         justify-content: center;
+                        font-size: 1.2em;
                     }
                     .genre {
                         text-transform: capitalize;

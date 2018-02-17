@@ -14,8 +14,6 @@ import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
 import round from '../utils/round'
 import Layout from '../components/Layout'
-import GenresRow from '../components/GenresRow'
-import Button from '../components/button'
 import { backGroundOrange } from "../utils/colors";
 
 function BarChartWrapper({ data, attributeKey}) {
@@ -75,18 +73,6 @@ function processAttribute(key, rounding, attributeValue, attributeStorage) {
     attributeStorage[key] = { distributionMap, sum, count };
 }
 
-function getGenreCount(artists) {
-    const genreCount = {};
-    artists.forEach(({ genres }) => {
-        genres.forEach(genre => {
-            genreCount[genre] = (genreCount[genre] || 0) + 1
-        })
-    })
-    const sorted = Object.entries(genreCount).map(([genre, count]) => ({genre, count}))
-    sorted.sort((a, b) => (b.count - a.count))
-    return sorted
-}
-
 const topTypesQuery = gql`
 query ($timeRange: TimeRange = medium_term) {
   topTracks: top(type: tracks, limit: 100, time_range: $timeRange) {
@@ -125,18 +111,6 @@ query ($timeRange: TimeRange = medium_term) {
           time_signature
           valence
         }
-      }
-    }
-    limit
-    total
-  }
-  topArtists: top(type: artists, limit: 100, time_range: $timeRange) {
-    items {
-      ... on Artist {
-        name
-        genres
-        popularity
-        followerCount
       }
     }
     limit
@@ -202,6 +176,7 @@ const AttributeRow = ({ sum, count, attributeKey, distributionMap, onClick, expa
         </div>
     )
 }
+
 class AttributeSection extends Component {
     state = { expanded: true }
 
@@ -264,70 +239,6 @@ class AttributeSection extends Component {
     }
 }
 
-class TopGenres extends Component {
-    state = { showAll: false }
-
-    toggle = () => {
-        this.setState({ showAll: !this.state.showAll })
-    }
-
-    render() {
-        const { genreCount } = this.props
-        return (
-            <div className="top-genres">
-                <div className="header">Your Top Artists Genres</div>
-                <div className="genres">
-                    <GenresRow genres={genreCount.slice(0,
-                        !this.state.showAll ? 20 : genreCount.length).map(({ genre, count }) => genre)}/>
-                </div>
-                <div className="bottom-toggle" onClick={this.toggle}>
-                    {!this.state.showAll ? "show all" : "show less"}
-                </div>
-                {/*language=CSS*/}
-                <style jsx>{`
-                    .top-genres {
-                        width: 100%;
-                        border: .5em;
-                        overflow: hidden;
-                        box-sizing: border-box;
-                        border-radius: .4em;
-                        padding-bottom: .5em;
-                        background-color: ${backGroundOrange};
-                        border-left: 1px solid ${backGroundOrange};
-                        border-right: 1px solid ${backGroundOrange};
-                        margin-bottom: .6em;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                    }
-                    .header {
-                        text-align: center;
-                        color: white;
-                    }
-                    .genres {
-                        display: flex;
-                            padding: .4em;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        background-color: white;
-                    }
-                    .genres :global(.pill) {
-
-                    }
-                    .bottom-toggle {
-                        cursor: pointer;
-                        font-size: 1.2em;
-                        margin-top: .2em;
-                        font-weight: 500;
-                        color: white;
-                        text-align: center;
-                    }
-                `}
-                </style>
-            </div>
-        )
-    }
-}
-
 class Index extends Component {
     state = {}
     static async getInitialProps ({req, res}) {
@@ -373,12 +284,11 @@ class Index extends Component {
     }
 
     renderTops () {
-        const { data: { topTracks: { items: topTracks }}, genreCount} = this.props
+        const { data: { topTracks: { items: topTracks }}} = this.props
         return (
             <div className="root">
-                <TopGenres genreCount={genreCount}/>
-                {this.renderTopTrackStats()}
                 <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={true} collapsable={true}/>
+                {this.renderTopTrackStats()}
                 {/*language=CSS*/}
                 <style jsx>{`
                     .root {
@@ -396,8 +306,8 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Discover Your Top Preferences" header="Your Top Preferences">
-                {this.props.data.topArtists ? this.renderTops() : <LoadingFullScreen/>}
+            <Layout name="Discover Your Top Tracks" header="Your Top Preferences">
+                {this.props.data.topTracks ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )
     }
@@ -406,13 +316,12 @@ class Index extends Component {
 const graphqlOptions = {
     props: (props) => {
         let genreCount, trackStats
-        const { data : { loading, topArtists, topTracks, fetchMore } } = props
+        const { data : { loading, topTracks, fetchMore } } = props
         // TODO add call to query by different ranges
-        if (!loading && topArtists) {
-            genreCount = getGenreCount(topArtists.items)
+        if (!loading && topTracks) {
             trackStats = processFeatures(topTracks.items.map(({audio_features}) => (audio_features)))
         }
-        return { genreCount, trackStats, ...props }
+        return { trackStats, ...props }
     }
 }
 

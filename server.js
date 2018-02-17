@@ -20,8 +20,8 @@ const port = parseInt(process.env.PORT, 10) || 3000
 function middlewareRedirectToHTTPS (req, res, next) {
     const protocol= req.headers['x-forwarded-proto']
     const isNotSecure = protocol !== 'https'
-
-    if (isNotSecure) {
+    const host = req.get('host')
+    if (isNotSecure && !host.startsWith('localhost')) {
         return res.redirect('https://' + req.get('host') + req.url)
     }
 

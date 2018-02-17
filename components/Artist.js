@@ -84,6 +84,7 @@ class Artist extends Component {
             <div>
                 <div className="name">{name}</div>
                 { classified && <GenresRow genres={genres}/> }
+                <div className="tip">Tap a genre and discover your taste!</div>
                 {/*language=CSS*/}
                 <style jsx>{`
                     .name {
@@ -92,6 +93,10 @@ class Artist extends Component {
                         margin-bottom: .3em;
                         color: black;
                         text-transform: capitalize;
+                    }
+                    .tip {
+                        text-align: right;
+                        font-style: italic;
                     }
                 `}</style>
             </div>
@@ -114,10 +119,17 @@ class Artist extends Component {
                     .artist {
                         display: flex;
                         flex-direction: column;
+                        cursor: pointer;
                     }
                     .artist :global(.image-with-loader) {
                         flex-shrink: 0;
-                        box-shadow: 0 2px 4px 0 ${Color(backGroundGrey).darken(.5).hsl().string()};
+                        transition: box-shadow 0.3s ease-in-out;
+                        box-shadow: 0 3px 6px 0 ${Color(backGroundGrey).darken(.5).hsl().string()};
+                    }
+                    .artist :global(.image-with-loader:hover) {
+                        flex-shrink: 0;
+                        transition: box-shadow 0.3s ease-in-out;
+                        box-shadow: 0 5px 10px 0 ${Color(backGroundGrey).darken(.5).hsl().string()};
                     }
                 `}</style>
             </div>

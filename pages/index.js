@@ -5,9 +5,9 @@ import withSentry from '../raven'
 class Index extends React.Component {
   static async getInitialProps({ res }) {
     if (res) {
-      res.redirect(`/my-tops`)
+      res.redirect(`/my-top-artists`)
     } else {
-      Router.replace('/my-tops')
+      Router.replace('/my-top-artists')
     }
     return {}
   }
