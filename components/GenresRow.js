@@ -7,7 +7,7 @@ const GenresRow = ({genres}) => {
     return (
         <div className="genre-row">
             {genres.map((g, i) => (
-                <Link href={`/genre?id=${encodeURIComponent(g)}`}>
+                <Link prefetch key={i} href={`/genre?id=${encodeURIComponent(g)}`}>
                     <div className="pill" key={i}>
                         {g}
                     </div>

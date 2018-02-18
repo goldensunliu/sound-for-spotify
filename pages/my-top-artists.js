@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { VictoryBar, VictoryChart, VictoryAxis } from 'victory'
 import { Collapse } from 'react-collapse'
 import css from 'styled-jsx/css'
 
@@ -125,7 +124,7 @@ class TopArtists extends Component {
                 <div className="artists">
                 {
                     artists.map(artist => (
-                        <Artist id={artist.id}/>
+                        <Artist key={artist.id} id={artist.id}/>
                     ))
                 }
                 </div>

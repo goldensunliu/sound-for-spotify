@@ -294,7 +294,7 @@ class Index extends Component {
         return (
             <div className="root">
                 <TimeControl timeRange={timeRange} route="/my-top-tracks"/>
-                <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={true} collapsable={true}/>
+                <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={false} collapsable={true}/>
                 {this.renderTopTrackStats()}
                 {/*language=CSS*/}
                 <style jsx>{`
@@ -313,7 +313,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Discover Your Top Tracks" header="Your Top Preferences">
+            <Layout name="Discover Your Top Tracks" header="Your Top Tracks">
                 {this.props.data.topTracks ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )

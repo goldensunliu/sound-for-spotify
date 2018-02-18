@@ -133,6 +133,8 @@ class Artist extends Component {
                 {/*language=CSS*/}
                 <style jsx>{`
                     .artist {
+                        width: 5em;
+                        height: 5em;
                         display: flex;
                         flex-direction: column;
                         cursor: pointer;

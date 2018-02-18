@@ -11,7 +11,7 @@ const LinkableSummary = ({ name, spotifyLink, image, href }) => {
                 { spotifyLink && <a href={spotifyLink} target="_blank"><img src="/static/Spotify_White.png"/></a>}
             </div>
             {image &&
-            <Link href={href}>
+            <Link prefetch href={href}>
                 <a><ImageWithLoader url={image.url} style={{ width: '10em', height: '10em', overflow: 'hidden' }}/></a>
             </Link>
             }

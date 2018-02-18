@@ -137,7 +137,7 @@ class ExpandedContent extends Component {
                         <div className="played-at-info"/>
                     }
                     <div className="top-row-right-side">
-                        { this.state.showDetailsLink && <Link href={`/track?id=${id}`}><a className="details-link">Details</a></Link> }
+                        { this.state.showDetailsLink && <Link prefetch href={`/track?id=${id}`}><a className="details-link">Details</a></Link> }
                         {
                             saved ?
                                 <Button color="blue" onClick={this.removeTrack} size="small">Remove</Button> :

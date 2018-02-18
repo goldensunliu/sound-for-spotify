@@ -74,7 +74,7 @@ class PlaylistInfo extends Component {
                         <div className={`bottom-cta${following ? " unfollow" : ""}`} onClick={following ? this.unfollowPlaylist : this.followPlaylist}>
                             {following ? "Unfollow" : "Follow"}
                         </div>
-                        <Link href={`/playlist?id=${playlistId}&ownerId=${ownerId}`}>
+                        <Link prefetch href={`/playlist?id=${playlistId}&ownerId=${ownerId}`}>
                             <a className={`details-cta`}>
                                 Details
                             </a>

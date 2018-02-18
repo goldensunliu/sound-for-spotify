@@ -2,15 +2,25 @@ import React, {Component} from 'react'
 import Link from 'next/link'
 import Popover from 'react-popover'
 import PropTypes from 'prop-types';
+import css from 'styled-jsx/css'
 
 import Button from '../components/button'
-import {backGroundOrange} from "../utils/colors";
+import {backGroundBlue, backGroundOrange} from "../utils/colors";
 
 const COPY_MAP = {
     short_term: 'Short',
     medium_term: 'Medium',
     long_term: 'Long',
 }
+
+{/*language=CSS*/}
+const CopyStyle = css`
+.copy {
+    padding: 5px 10px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+`
 
 export default class TimeControl extends Component {
     state = {}
@@ -25,23 +35,21 @@ export default class TimeControl extends Component {
 
     renderRangeControl(range) {
         const { timeRange, route } = this.props
-        if (timeRange !== range) {
-            return (
-                <Button size="mid">
-                    <Link href={`${route}?timeRange=${range}`}>{COPY_MAP[range]}</Link>
-                </Button>
-            )
-        }
+        const isActive = timeRange === range
         return (
             <div className="copy">
-                {COPY_MAP[range]}
+                { !isActive ?
+                    <Link prefetch href={`${route}?timeRange=${range}`}><a>{COPY_MAP[range]}</a></Link> :
+                    COPY_MAP[range]
+                }
+                {/*language=CSS*/}
+                <style jsx>{CopyStyle}
+                </style>
                 {/*language=CSS*/}
                 <style jsx>{`
                     .copy {
-                        padding: 5px 10px;
-                        font-size: 1.4em;
-                        font-weight: bold;
-                        color: ${backGroundOrange};
+                        color: ${isActive ? backGroundOrange : backGroundBlue};
+                        cursor: ${isActive ? "initial" : "pointer"};
                     }
                 `}
                 </style>
@@ -82,6 +90,7 @@ export default class TimeControl extends Component {
                     .time-control {
                         position: fixed;
                         bottom: 1em;
+                        left: calc(50% - 4.5em);
                         z-index: 1;
                     }
                 `}
