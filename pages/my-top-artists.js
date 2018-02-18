@@ -150,10 +150,6 @@ class TopArtists extends Component {
                         margin: .25em;
                         font-size: 1.5em;
                     }
-                    .artists :global(.spinner) {
-                        font-size: 1.5em;
-                        width: 5em;
-                    }
                 `}
                 </style>
             </div>

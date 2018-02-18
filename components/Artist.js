@@ -105,7 +105,22 @@ class Artist extends Component {
     render() {
         const { data } = this.props
         // TODO do the loading
-        if (data.loading) return <Spinner/>
+        if (data.loading) return (
+            <div className="artist">
+                <Spinner/>
+                {/*language=CSS*/}
+                <style jsx>{`
+                    .artist {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        width: 5em;
+                        height: 5em;
+                    }
+                `}</style>
+            </div>
+        )
         const {name, genres, images, external_urls: { spotify }} = data.artist
         return (
             <div className="artist">
