@@ -9,6 +9,7 @@ import AudioFeatureIcon from '../components/AudioFeatureIcon'
 import Playlist from '../components/Playlist'
 import Expand from '../images/expand-more.svg'
 
+import TimeControl from '../components/TimeControl'
 import withData from '../with-apollo/withData'
 import withSentry from '../raven'
 import checkLogin from '../utils/checkLogin'
@@ -241,8 +242,13 @@ class AttributeSection extends Component {
 
 class Index extends Component {
     state = {}
-    static async getInitialProps ({req, res}) {
+    static defaultProps = {
+        timeRange: "medium_term"
+    }
+    static async getInitialProps ({req, res, query}) {
+        const { timeRange } = query
         checkLogin({req, res})
+        return { timeRange }
     }
 
     constructor (props) {
@@ -284,9 +290,10 @@ class Index extends Component {
     }
 
     renderTops () {
-        const { data: { topTracks: { items: topTracks }}} = this.props
+        const { data: { topTracks: { items: topTracks }}, timeRange} = this.props
         return (
             <div className="root">
+                <TimeControl timeRange={timeRange} route="/my-top-tracks"/>
                 <Playlist tracks={topTracks} name="Your Top Tracks" isCollapsed={true} collapsable={true}/>
                 {this.renderTopTrackStats()}
                 {/*language=CSS*/}
@@ -322,7 +329,15 @@ const graphqlOptions = {
             trackStats = processFeatures(topTracks.items.map(({audio_features}) => (audio_features)))
         }
         return { trackStats, ...props }
-    }
+    },
+    options: (props) => {
+        const { timeRange } = props
+        return {
+            variables: {
+                timeRange
+            }
+        }
+    },
 }
 
 export default withSentry(withData(graphql(topTypesQuery, graphqlOptions)(Index)))

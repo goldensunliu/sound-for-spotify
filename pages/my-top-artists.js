@@ -12,31 +12,8 @@ import checkLogin from '../utils/checkLogin'
 import Layout from '../components/Layout'
 import GenresRow from '../components/GenresRow'
 import Artist from '../components/Artist'
+import TimeControl from '../components/TimeControl'
 import { backGroundOrange } from "../utils/colors";
-
-function BarChartWrapper({ data, attributeKey}) {
-    let x = (d) => (d[0] * 10)
-    let xDomain = [0, 10];
-    if (attributeKey === 'tempo') {
-        xDomain = false;
-        x = (d) => (d[0])
-    }
-    return (
-        <VictoryChart
-            animate
-            height={250}
-            padding={{ top: 60, bottom: 30, left: 20, right: 20 }}
-            style={{
-                parent: { backgroundColor: "white"}
-            }}
-        >
-            <VictoryBar data={data} x={x} y={1} labels={(d) => d.y} alignment="start"
-                        style={{ data: { fill: backGroundOrange } }} cornerRadius={5}/>
-            <VictoryAxis crossAxis={false} domain={{x : xDomain}}/>
-
-        </VictoryChart>
-    )
-}
 
 function getGenreCount(artists) {
     const genreCount = {};
@@ -142,8 +119,9 @@ class TopArtists extends Component {
         const { artists } = this.props
         return (
             <div className="card">
-                <div className="header">Your Top Artists</div>
-                <div className="tip">click an artist to discover related genres</div>
+                <div className="tip">
+                    click an artist to discover related genres
+                </div>
                 <div className="artists">
                 {
                     artists.map(artist => (
@@ -154,13 +132,11 @@ class TopArtists extends Component {
                 <style jsx>{CardStyle}</style>
                 {/*language=CSS*/}
                 <style jsx>{`
-                    .header {
-                        text-align: center;
-                        color: white;
-                    }
                     .tip {
                         text-align: center;
-                        background-color: white;
+                        color: white;
+                        font-size: 1.1em;
+                        line-height: 2em;
                     }
                     .artists {
                         display: flex;
@@ -183,8 +159,13 @@ class TopArtists extends Component {
 
 class Index extends Component {
     state = {}
-    static async getInitialProps ({req, res}) {
+    static defaultProps = {
+        timeRange: "medium_term"
+    }
+    static async getInitialProps ({req, res, query}) {
+        const { timeRange } = query
         checkLogin({req, res})
+        return { timeRange }
     }
 
     constructor (props) {
@@ -192,9 +173,10 @@ class Index extends Component {
     }
 
     renderTops () {
-        const { data: { topArtists: { items: topArtists } }, genreCount} = this.props
+        const { data: { topArtists: { items: topArtists } }, genreCount, timeRange} = this.props
         return (
             <div className="root">
+                <TimeControl timeRange={timeRange} route="/my-top-artists"/>
                 <TopArtists artists={topArtists}/>
                 <TopGenres genreCount={genreCount}/>
                 {/*language=CSS*/}
@@ -206,7 +188,6 @@ class Index extends Component {
                         width: 100%;
                         max-width: 800px;
                         margin: auto;
-                        margin-top: 1.5em;
                     }
                 `}</style>
             </div>)
@@ -214,7 +195,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout name="Discover Your Top Artists" header="Your Top Preferences">
+            <Layout name="Discover Your Top Artists" header="Your Top Artists">
                 {this.props.data.topArtists ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )
@@ -230,7 +211,15 @@ const graphqlOptions = {
             genreCount = getGenreCount(topArtists.items)
         }
         return { genreCount, ...props }
-    }
+    },
+    options: (props) => {
+        const { timeRange } = props
+        return {
+            variables: {
+                timeRange
+            }
+        }
+    },
 }
 
 export default withSentry(withData(graphql(topTypesQuery, graphqlOptions)(Index)))
