@@ -147,8 +147,12 @@ class TopArtists extends Component {
                         background-color: white;
                     }
                     .artists :global(.artist) {
-                        font-size: 1.5em;
                         margin: .25em;
+                        font-size: 1.5em;
+                    }
+                    .artists :global(.spinner) {
+                        font-size: 1.5em;
+                        width: 5em;
                     }
                 `}
                 </style>

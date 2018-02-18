@@ -41,7 +41,7 @@ const graphalOptions = {
 const ArtistAvatar = ({images, name}) => {
     if (images && images.length) {
         const image = images[0]
-        return <ImageWithLoader url={image.url} style={{ width: '5em', height: '5em', borderRadius: '50%', overflow: 'hidden' }}/>
+        return <ImageWithLoader url={image.url}/>
     } else {
         const initials = name.split(" ").map(word => word[0]).join("")
         return (
@@ -57,8 +57,8 @@ const ArtistAvatar = ({images, name}) => {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        width: 4em;
-                        height: 4em;
+                        width: 5em;
+                        height: 5em;
                     }
                 `}</style>
             </div>
@@ -104,13 +104,14 @@ class Artist extends Component {
     }
     render() {
         const { data } = this.props
+        // TODO do the loading
         if (data.loading) return <Spinner/>
         const {name, genres, images, external_urls: { spotify }} = data.artist
         return (
             <div className="artist">
                 <Popover style={{ maxWidth: '30em' }} preferPlace="below" body={this.renderPopoverBody()} onOuterAction={this.handleClose}
                              isOpen={this.state.open} refreshIntervalMs={300}>
-                        <div style={{ width: '5em' }} onClick={this.toggleOpen}>
+                        <div onClick={this.toggleOpen}>
                             <ArtistAvatar images={images} name={name}/>
                         </div>
                     </Popover>
@@ -122,6 +123,10 @@ class Artist extends Component {
                         cursor: pointer;
                     }
                     .artist :global(.image-with-loader) {
+                        width: 5em;
+                        height: 5em;
+                        border-radius: 50%;
+                        overflow: hidden;
                         flex-shrink: 0;
                         transition: box-shadow 0.3s ease-in-out;
                         box-shadow: 0 3px 6px 0 ${Color(backGroundGrey).darken(.5).hsl().string()};

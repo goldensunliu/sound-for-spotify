@@ -9,8 +9,8 @@ const Spinner = () => (
             .spinner {
                 animation: rotate 2s linear infinite;
                 z-index: 2;
-                width: 50px;
-                height: 50px;
+                width: 3.125em;
+                height: 3.125em;
             }
 
             .path {
