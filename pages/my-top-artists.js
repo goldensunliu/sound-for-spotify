@@ -193,9 +193,10 @@ class Index extends Component {
     }
 
     render() {
+        const { data : { loading, topArtists } }= this.props
         return (
             <Layout name="Discover Your Top Artists" header="Your Top Artists">
-                {this.props.data.topArtists ? this.renderTops() : <LoadingFullScreen/>}
+                {topArtists && !loading ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )
     }

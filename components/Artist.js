@@ -40,7 +40,8 @@ const graphalOptions = {
 
 const ArtistAvatar = ({images, name}) => {
     if (images && images.length) {
-        const image = images[0]
+        const bigImages = images.filter(i => i.width > 100)
+        const image = (bigImages.length && bigImages[bigImages.length -1]) || images[0]
         return <ImageWithLoader url={image.url}/>
     } else {
         const initials = name.split(" ").map(word => word[0]).join("")
@@ -84,11 +85,13 @@ class Artist extends Component {
             <div>
                 <div className="name">{name}</div>
                 { classified && <GenresRow genres={genres}/> }
-                <div className="tip">Tap a genre and discover your taste!</div>
+                { classified ? <div className="tip">Tap a genre and discover your taste!</div> :
+                    <div className="tip">Not classified yet. Check on this artist later!</div>
+                }
                 {/*language=CSS*/}
                 <style jsx>{`
                     .name {
-                        font-size: 1em;
+                        font-size: 1.2em;
                         font-weight: 500;
                         margin-bottom: .3em;
                         color: black;

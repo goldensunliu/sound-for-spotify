@@ -40,7 +40,7 @@ class Index extends Component {
 
     render () {
         return (
-            <Layout name="Login To Discover Your Sound Of Spotify" hideMenu>
+            <Layout name="Discover Your Sound With Musical Intelligence Data from Spotify" hideMenu>
                 <PendingState loggingIn={this.state.loggingIn}/>
             </Layout>
         )

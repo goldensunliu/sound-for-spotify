@@ -4,19 +4,32 @@ import { formatRelative } from 'date-fns'
 import Track from '../components/track'
 import { backGroundOrange } from '../utils/colors'
 import { Collapse } from 'react-collapse'
+import Expand from '../images/expand-more.svg'
 
-const SessionDivider = ({playedAt, now, length, toggleExpand }) => {
+const SessionDivider = ({playedAt, now, length, toggleExpand, expanded }) => {
     return (
         <div className="root" onClick={toggleExpand}>
             <div className="top">
-                <div>{`Session ${formatRelative(playedAt, now)}`}</div>
+                <div className="title">{`Session ${formatRelative(playedAt, now)}`}</div>
                 <div>{`${length} ${length > 1 ? 'Songs' : 'Song'}`}</div>
+                <Expand style={{ width: '1.5em', height: '1.5em' }} className={`expand${expanded ? " expanded" : ""}`}/>
             </div>
             { /*language=CSS*/ }
             <style jsx>{`
                 .root {
                     width: 100%;
                     cursor: pointer;
+                }
+                .title {
+                    flex: 1;
+                }
+                .root :global(.expand) {
+                    transform: rotate(90deg);
+                    transition: all .25s;
+                    fill: white;
+                }
+                .root :global(.expanded) {
+                    transform: rotate(0deg);
                 }
                 .top {
                     color: white;
@@ -71,7 +84,7 @@ export default class Session extends Component {
         return (
             <div className={`root${expanded ? '' : ' collapsed'}`}>
                 {
-                    <SessionDivider toggleExpand={this.toggleExpand} playedAt={new Date(played_at)} now={now} length={session.length}/>
+                    <SessionDivider expanded={expanded} toggleExpand={this.toggleExpand} playedAt={new Date(played_at)} now={now} length={session.length}/>
                 }
                 <Collapse isOpened={expanded} hasNestedCollapse>
                     {expanded && this.renderTracks()}

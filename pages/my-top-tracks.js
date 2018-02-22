@@ -126,11 +126,11 @@ const AttributeRow = ({ sum, count, attributeKey, distributionMap, onClick, expa
     const max = sortedKeys[sortedKeys.length - 1]
     let copy;
     if (attributeKey !== 'tempo') {
-        copy = `Min=${min*10}  Max=${max*10}  Avg=${round(sum / count * 10, 0)}/10`
+        copy = `Avg = ${round(sum / count * 10, 0)}/10`
     }
     else
     {
-        copy = `Min=${min}  Max=${max}  Avg=${round(sum / count, 0)}`
+        copy = `Avg = ${round(sum / count, 0)}`
     }
     return (
         <div className="root" onClick={onClick}>
@@ -312,9 +312,10 @@ class Index extends Component {
     }
 
     render() {
+        const { data : { loading, topTracks } }= this.props
         return (
             <Layout name="Discover Your Top Tracks" header="Your Top Tracks">
-                {this.props.data.topTracks ? this.renderTops() : <LoadingFullScreen/>}
+                {topTracks && !loading ? this.renderTops() : <LoadingFullScreen/>}
             </Layout>
         )
     }

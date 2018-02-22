@@ -49,12 +49,12 @@ export const PendingState = ({ loggingIn }) => {
         <div className="root">
             <Brand/>
             {!loggingIn && <div className="copy">
-                Find your sound preferences using music intelligence data about artists, albums, and tracks straight from <img className="spotify-logo" src="/static/Spotify_Logo_RGB_Black.png"/>
+                Find your sound preferences using intelligence data about artists, genres, and tracks straight from <img className="spotify-logo" src="/static/Spotify_Logo_RGB_Black.png"/>
             </div>}
             {loggingIn && <Typist className="copy">
                 Logging In.........
             </Typist>}
-            {LoginCta}
+            {!loggingIn && LoginCta}
             { /*language=CSS*/ }
             <style jsx>{`
                 .root {

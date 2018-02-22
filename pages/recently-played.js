@@ -71,8 +71,8 @@ class Index extends Component {
                 { /*language=CSS*/ }
                 <style jsx>{`
                     .collapse-toggle {
-                        margin-top: 1em;
                         margin-bottom: 1em;
+                        font-size: .8em;
                     }
                     div {
                         display: flex;
