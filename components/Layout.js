@@ -21,7 +21,7 @@ const Layout = ({name, children, hideMenu, header}) =>{
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta property="og:title"              content="Discover Your Sound With Musical Intelligence Data from Spotify" />
                 <meta property="og:description"        content="Find your sound preferences using intelligence data about artists, genres, and tracks straight from Spotify" />
-                <meta property="og:image"              content="/static/og-image.png" />
+                <meta property="og:image"              content="https://soundforspotify.com/static/og-image.png" />
                 <link rel="icon" type="image/png" href="/static/volume-bars.png"/>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
