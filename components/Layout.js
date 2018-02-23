@@ -19,6 +19,7 @@ const Layout = ({name, children, hideMenu, header}) =>{
             <NextHead>
                 <title>{name}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:url"                content="https://soundforspotify.com/" />
                 <meta property="og:title"              content="Discover Your Sound With Musical Intelligence Data from Spotify" />
                 <meta property="og:type"               content="website" />
                 <meta property="og:description"        content="Find your sound preferences using intelligence data about artists, genres, and tracks straight from Spotify" />
