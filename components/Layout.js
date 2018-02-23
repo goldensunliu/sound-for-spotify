@@ -20,6 +20,7 @@ const Layout = ({name, children, hideMenu, header}) =>{
                 <title>{name}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta property="og:title"              content="Discover Your Sound With Musical Intelligence Data from Spotify" />
+                <meta property="og:type"               content="website" />
                 <meta property="og:description"        content="Find your sound preferences using intelligence data about artists, genres, and tracks straight from Spotify" />
                 <meta property="og:image"              content="https://soundforspotify.com/static/og-image.png" />
                 <link rel="icon" type="image/png" href="/static/volume-bars.png"/>
