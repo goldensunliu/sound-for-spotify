@@ -23,7 +23,8 @@ function parseUserAndPlaylistId(url) {
 }
 
 async function getGenreNoises(genre) {
-    const id = genre.replace(/\W/g, '').toLowerCase()
+    // remove diacritics and space, then lower case
+    const id = genre.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\W/g, '').toLowerCase()
     const result = await getPlaylists(id)
     if (!result) return null
     let {corelist, pulse, edge, intro, lastYear } = result
@@ -93,7 +94,7 @@ export const mergeResolvers2nd = mergeInfo =>({
                 if (!parent.corelist || !parent.corelist.description) return
                 let { corelist: { description } } = parent
                 const $ = cheerio.load(description)
-                const relatedGenres = $('a').map((i, el) => $(el).text()).get().slice(4)
+                const relatedGenres = $('a').map((i, el) => $(el).text()).get().slice(5)
                 return await mergeInfo.delegate(
                     'query',
                     'genreNoises',
