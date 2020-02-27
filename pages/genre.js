@@ -19,7 +19,7 @@ const edgeCopy = (genre) => `Some recent less-known music that fans of ${genre} 
 const pulseCopy = (genre) => `The music that fans of ${genre} are listening to now`
 const coreCopy = (genre) => `An attempted algorithmic core music of ${genre}`
 const introCopy = (genre) => `An attempted algorithmic introduction to ${genre} based on math and listening data`
-const lastYearCopy = (genre) => `New or newly released songs most distinctively popular among fans of ${genre} in 2017`
+const lastYearCopy = (genre) => `New or newly released songs most distinctively popular among fans of ${genre} in last year`
 
 class PlaylistInfo extends Component {
     state = { open: false }
@@ -203,7 +203,7 @@ class Index extends Component {
         const { corelist, pulse, edge, intro, lastYear } = genreNoises
         // defensive filter out of nulls
         const related = genreNoises.related.filter((i) => i)
-        return (
+	return (
             <div className="root">
                 <div className="playlists-lay-out">
                     <div className={`genre`}>{id}</div>
@@ -213,12 +213,12 @@ class Index extends Component {
                         { corelist &&  <ConnectedPlaylistInfo playlist={corelist} name="The Sound" copy={coreCopy(id)}/>}
                         { pulse && <ConnectedPlaylistInfo playlist={pulse} name="The Pulse" copy={pulseCopy(id)}/>}
                         { edge &&  <ConnectedPlaylistInfo playlist={edge} name="The Edge" copy={edgeCopy(id)}/>}
-                        { lastYear && <ConnectedPlaylistInfo playlist={lastYear} name="2017" copy={lastYearCopy(id)}/>}
+                        { lastYear && <ConnectedPlaylistInfo playlist={lastYear} name="Last Year" copy={lastYearCopy(id)}/>}
                     </div>
                 </div>
                 <div className="genres">
                     <div className={`related`}>Related Genres</div>
-                    <GenresRow genres={genreNoises.related.map(({id}) => id )}/>
+                    <GenresRow genres={related.map(({id}) => id )}/>
                 </div>
                 { /*language=CSS*/ }
                 <style jsx>{`
