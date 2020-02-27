@@ -218,7 +218,7 @@ class Index extends Component {
                 </div>
                 <div className="genres">
                     <div className={`related`}>Related Genres</div>
-                    <GenresRow genres={genreNoises.related.map(({id}) => id )}/>
+                    <GenresRow genres={related.map(({id}) => id )}/>
                 </div>
                 { /*language=CSS*/ }
                 <style jsx>{`
