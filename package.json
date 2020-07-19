@@ -43,7 +43,7 @@
     "helmet": "^3.10.0",
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "next": "^4.2.3",
     "path": "^0.12.7",
     "raven-js": "^3.22.1",
